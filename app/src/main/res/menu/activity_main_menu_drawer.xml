@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_course_list"
+            android:title="Courses" />
+        <item
+            android:id="@+id/nav_call"
+            android:icon="@drawable/ic_enrolled_courses"
+            android:title="Enrolled Courses"
+            />
+        <item
+            android:id="@+id/nav_redeem"
+            android:icon="@drawable/ic_my_activities"
+            android:title="My Activities" />
+    </group>
+
+</menu>
