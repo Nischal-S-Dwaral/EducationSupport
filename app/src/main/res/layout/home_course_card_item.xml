@@ -19,14 +19,15 @@
         android:weightSum="2">
 
         <ImageView
-            android:id="@+id/ll_course_card_card_icon"
+            android:id="@+id/ll_course_card_icon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_course_card_card_icon"
-            android:layout_marginStart="10dp"/>
+            android:src="@drawable/ic_course_card_icon"
+            android:layout_marginStart="10dp"
+            android:contentDescription="Course card icon"/>
 
         <TextView
-            android:id="@+id/ll_course_card_card_name"
+            android:id="@+id/ll_course_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"

@@ -20,8 +20,8 @@ class CourseCardAdapter(private val coursesDataset: Array<String>, private val c
 
         init {
             linearLayout = itemView.findViewById(R.id.ll_course_card_background)
-            cardIcon = itemView.findViewById(R.id.ll_course_card_card_icon)
-            cardName = itemView.findViewById(R.id.ll_course_card_card_name)
+            cardIcon = itemView.findViewById(R.id.ll_course_card_icon)
+            cardName = itemView.findViewById(R.id.ll_course_card_name)
         }
     }
 

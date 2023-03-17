@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.adapters.CourseCardAdapter
+import com.example.educationsupport.adapters.MyActivitiesCardAdapter
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var myActivitiesRecyclerView: RecyclerView
     private lateinit var myActivitiesLayoutManager: RecyclerView.LayoutManager
-    private lateinit var myActivitiesAdaptor: RecyclerView.Adapter<RecyclerView.ViewHolder>
+    private lateinit var myActivitiesAdaptor: MyActivitiesCardAdapter
 
     private lateinit var appBarLayout: AppBarLayout
 
@@ -76,11 +78,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * Set up my activities recycler view
          */
         myActivitiesLayoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+        myActivitiesAdaptor = MyActivitiesCardAdapter(arrayOf(
+            "Activity 0", "Activity 1", "Activity 2", "Activity 3", "Activity 4", "Activity 5"),
+            this@MainActivity)
         myActivitiesRecyclerView = findViewById(R.id.rv_activities_cards)
         myActivitiesRecyclerView.setHasFixedSize(true)
         myActivitiesRecyclerView.layoutManager = myActivitiesLayoutManager
-        //TODO: Update the adapter
-        myActivitiesRecyclerView.adapter = null
+        myActivitiesRecyclerView.adapter = myActivitiesAdaptor
 
         /**
          * Setup the app bar
@@ -122,6 +126,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        TODO("Handle navigation view item clicks here.")
+        Toast.makeText(this@MainActivity, "Item is selected "+item.title.toString(), Toast.LENGTH_SHORT).show()
+        return false
     }
 }
