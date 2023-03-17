@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="12dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:id="@+id/ll_course_card_background"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/black"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <ImageView
+            android:id="@+id/ll_course_card_card_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_course_card_card_icon"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
+            android:id="@+id/ll_course_card_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="Android Development"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

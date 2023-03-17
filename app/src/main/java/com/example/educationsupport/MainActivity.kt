@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.educationsupport.adapters.CourseCardAdapter
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var coursesRecyclerView: RecyclerView
     private lateinit var coursesLayoutManager: RecyclerView.LayoutManager
-    private lateinit var coursesAdaptor: RecyclerView.Adapter<RecyclerView.ViewHolder>
+    private lateinit var coursesAdaptor: CourseCardAdapter
 
     private lateinit var myActivitiesRecyclerView: RecyclerView
     private lateinit var myActivitiesLayoutManager: RecyclerView.LayoutManager
@@ -63,11 +64,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
          * Set up my courses recycler view
          */
         coursesLayoutManager = GridLayoutManager(this@MainActivity, 2)
+        coursesAdaptor = CourseCardAdapter(arrayOf(
+            "Course 0", "Course 1", "Course 2", "Course 3", "Course 4", "Course 5"),
+            this@MainActivity)
         coursesRecyclerView = findViewById(R.id.rv_course_cards)
         coursesRecyclerView.setHasFixedSize(true)
         coursesRecyclerView.layoutManager = coursesLayoutManager
-        //TODO: Update the adapter
-        coursesRecyclerView.adapter = null
+        coursesRecyclerView.adapter = coursesAdaptor
 
         /**
          * Set up my activities recycler view
