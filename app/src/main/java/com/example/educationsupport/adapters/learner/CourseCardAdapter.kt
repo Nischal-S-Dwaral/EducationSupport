@@ -1,4 +1,4 @@
-package com.example.educationsupport.adapters
+package com.example.educationsupport.adapters.learner
 
 import android.content.Context
 import android.view.LayoutInflater

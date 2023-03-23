@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.example.educationsupport.fragment.CourseListFragment
-import com.example.educationsupport.fragment.EnrolledCoursesFragment
-import com.example.educationsupport.fragment.HomeFragment
-import com.example.educationsupport.fragment.MyActivitiesFragment
+import com.example.educationsupport.fragment.learner.CourseListFragment
+import com.example.educationsupport.fragment.learner.EnrolledCoursesFragment
+import com.example.educationsupport.fragment.learner.HomeFragment
+import com.example.educationsupport.fragment.learner.MyActivitiesFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

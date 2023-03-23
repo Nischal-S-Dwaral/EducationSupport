@@ -1,4 +1,4 @@
-package com.example.educationsupport.adapters
+package com.example.educationsupport.adapters.learner
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,21 +10,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 
-class CourseListCardAdapter(private val coursesDataset: Array<String>, private val context: Context) :
-    RecyclerView.Adapter<CourseListCardAdapter.ViewHolder?>() {
+class EnrolledCourseListCardAdapter(private val coursesDataset: Array<String>, private val context: Context) :
+    RecyclerView.Adapter<EnrolledCourseListCardAdapter.ViewHolder?>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tvCourseTitle: TextView
-        var llCourseListCardCollapsingLayout: LinearLayout
-        var llActivitiesTests: LinearLayout
+        var tvEnrolledCourseTitle: TextView
+        var llEnrolledCourseListCardCollapsingLayout: LinearLayout
+        var llEnrolledActivitiesQuizLayout: LinearLayout
         var buttonCollapse: ImageButton
         var collpased : Boolean = true
 
         init {
-            tvCourseTitle = itemView.findViewById(R.id.tv_course_title)
-            llCourseListCardCollapsingLayout = itemView.findViewById(R.id.ll_course_list_card_collapsing_layout)
-            llActivitiesTests = itemView.findViewById(R.id.ll_activities_tests)
-            buttonCollapse = itemView.findViewById(R.id.btn_course_list_card_collapse)
+            tvEnrolledCourseTitle = itemView.findViewById(R.id.tv_enrolled_course_title)
+            llEnrolledCourseListCardCollapsingLayout = itemView.findViewById(R.id.ll_enrolled_course_list_card_collapsing_layout)
+            llEnrolledActivitiesQuizLayout = itemView.findViewById(R.id.ll_enrolled_activities_quiz)
+            buttonCollapse = itemView.findViewById(R.id.btn_enrolled_course_list_card_collapse)
         }
     }
 
@@ -32,7 +32,7 @@ class CourseListCardAdapter(private val coursesDataset: Array<String>, private v
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.course_list_card_item, parent, false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.enrolled_course_list_card_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -41,7 +41,7 @@ class CourseListCardAdapter(private val coursesDataset: Array<String>, private v
         /**
          * Set the Course Name to the card
          */
-        holder.tvCourseTitle.text = coursesDataset[position]
+        holder.tvEnrolledCourseTitle.text = coursesDataset[position]
 
         /**
          * Handle the card collapsing event
@@ -49,11 +49,11 @@ class CourseListCardAdapter(private val coursesDataset: Array<String>, private v
         holder.buttonCollapse.setOnClickListener {
             if (holder.collpased) {
                 holder.collpased = false
-                holder.llCourseListCardCollapsingLayout.visibility = View.VISIBLE
+                holder.llEnrolledCourseListCardCollapsingLayout.visibility = View.VISIBLE
                 holder.buttonCollapse.setImageResource(R.drawable.ic_up_arrow)
             } else {
                 holder.collpased = true
-                holder.llCourseListCardCollapsingLayout.visibility = View.GONE
+                holder.llEnrolledCourseListCardCollapsingLayout.visibility = View.GONE
                 holder.buttonCollapse.setImageResource(R.drawable.ic_down_arrow)
             }
         }

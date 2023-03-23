@@ -1,4 +1,4 @@
-package com.example.educationsupport.adapters
+package com.example.educationsupport.adapters.learner
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -28,12 +28,12 @@ class MyActivitiesCardAdapter(private val myActivitiesDataset: Array<String>, pr
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MyActivitiesCardAdapter.ViewHolder {
+    ): ViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.home_my_activities_card_item, parent, false)
-        return MyActivitiesCardAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyActivitiesCardAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //TODO: Need to handle OnClickListener
         holder.cardName.text = myActivitiesDataset[position]
     }

@@ -1,4 +1,4 @@
-package com.example.educationsupport.fragment
+package com.example.educationsupport.fragment.learner
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
-import com.example.educationsupport.adapters.CourseCardAdapter
-import com.example.educationsupport.adapters.MyActivitiesCardAdapter
+import com.example.educationsupport.adapters.learner.CourseCardAdapter
+import com.example.educationsupport.adapters.learner.MyActivitiesCardAdapter
 
 class HomeFragment : Fragment() {
 

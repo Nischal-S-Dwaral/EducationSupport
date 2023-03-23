@@ -34,7 +34,7 @@
                     android:gravity="left"
                     android:text="Android Development Part-1"
                     android:textColor="@android:color/black"
-                    android:id="@+id/tv_course_title"/>
+                    android:id="@+id/tv_enrolled_course_title"/>
 
                 <ProgressBar
                     android:layout_width="match_parent"
@@ -55,7 +55,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_course_list_card_collapsing_layout"
+            android:id="@+id/ll_enrolled_course_list_card_collapsing_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -73,7 +73,7 @@
                 android:layout_marginVertical="8dp">
 
                 <TextView
-                    android:id="@+id/tv_download_course_contents"
+                    android:id="@+id/tv_enrolled_download_course_contents"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -92,14 +92,14 @@
                 android:background="@color/light_gray"/>
 
             <LinearLayout
-                android:id="@+id/ll_activities_tests"
+                android:id="@+id/ll_enrolled_activities_quiz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginVertical="8dp">
 
                 <TextView
-                    android:id="@+id/tv_test"
+                    android:id="@+id/tv_enrolled_course_quiz"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -114,7 +114,7 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/btn_course_list_card_collapse"
+            android:id="@+id/btn_enrolled_course_list_card_collapse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_down_arrow"

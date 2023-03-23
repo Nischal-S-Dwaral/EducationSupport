@@ -1,4 +1,4 @@
-package com.example.educationsupport.fragment
+package com.example.educationsupport.fragment.learner
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
