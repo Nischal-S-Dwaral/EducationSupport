@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/nav_course_list"
+        android:title="Courses"
+        android:icon="@drawable/ic_course_list"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/nav_enrolled_courses"
+        android:title="Enrolled Courses"
+        android:icon="@drawable/ic_enrolled_courses"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/nav_my_activities"
+        android:title="My Activities"
+        android:icon="@drawable/ic_my_activities"
+        app:showAsAction="ifRoom"/>
+</menu>
