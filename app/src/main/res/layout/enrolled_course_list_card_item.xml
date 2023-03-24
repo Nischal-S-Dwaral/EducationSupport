@@ -70,7 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginVertical="8dp">
+                android:layout_marginVertical="8dp"
+                android:id="@+id/ll_enrolled_download_course_contents">
 
                 <TextView
                     android:id="@+id/tv_enrolled_download_course_contents"

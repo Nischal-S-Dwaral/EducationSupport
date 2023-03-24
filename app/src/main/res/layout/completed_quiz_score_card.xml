@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="12dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="Quiz-1"
+            android:textSize="24dp"
+            android:textColor="@android:color/black"
+            android:id="@+id/tv_completed_quiz_name"/>
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/quiz_score_progress_bar"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:indeterminateOnly="false"
+                android:progress="80"
+                android:progressDrawable="@drawable/progress_bar_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.823"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:progress="80" />
+
+            <TextView
+                android:id="@+id/completed_quiz_score_text_view_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintBottom_toBottomOf="@+id/quiz_score_progress_bar"
+                app:layout_constraintEnd_toEndOf="@id/quiz_score_progress_bar"
+                app:layout_constraintStart_toStartOf="@+id/quiz_score_progress_bar"
+                app:layout_constraintTop_toTopOf="@+id/quiz_score_progress_bar"
+                tools:text="80%" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
