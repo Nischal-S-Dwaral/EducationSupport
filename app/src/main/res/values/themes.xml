@@ -12,15 +12,18 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/urbanist</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/urbanist</item>
     </style>
 
     <style name="CircularDeterminateProgressBar">
         <item name="android:indeterminateOnly">false </item>
         <item name="android:progressDrawable">@drawable/progress_bar_circle</item>
+        <item name="android:fontFamily">@font/urbanist</item>
     </style>
 
 </resources>
