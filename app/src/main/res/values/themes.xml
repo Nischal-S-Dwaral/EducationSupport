@@ -26,4 +26,17 @@
         <item name="android:fontFamily">@font/urbanist</item>
     </style>
 
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:buttonBarPositiveButtonStyle">@style/MyAlertDialogButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/MyAlertDialogButtonStyle</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/MyAlertDialogButtonStyle</item>
+        <item name="android:fontFamily">@font/urbanist</item>
+
+    </style>
+
+    <style name="MyAlertDialogButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/urbanist</item>
+    </style>
+
 </resources>

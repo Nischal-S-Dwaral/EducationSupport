@@ -1,14 +1,19 @@
 package com.example.educationsupport.adapters.learner
 
 import android.content.Context
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
+import com.example.educationsupport.learner.TakeQuizActivity
 import com.example.educationsupport.model.Quiz
 
 
@@ -41,16 +46,28 @@ class QuizListCardAdapter(private val quizList: ArrayList<Quiz>, private val con
 
     class StartQuizCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var tvQuizName: TextView
+        private var llStartQuiz: LinearLayout
+        private var progressLoadQuiz: ProgressBar
 
         init {
             tvQuizName = itemView.findViewById(R.id.tv_quiz_name)
+            llStartQuiz = itemView.findViewById(R.id.ll_start_quiz)
+            progressLoadQuiz = itemView.findViewById(R.id.progress_load_quiz)
         }
 
         fun bind(quiz: Quiz) {
             tvQuizName.text = quiz.title
 
             itemView.setOnClickListener {
-                Toast.makeText(itemView.context, "Start Quiz View Holder is clicked", Toast.LENGTH_SHORT).show()
+                llStartQuiz.visibility = View.GONE
+                progressLoadQuiz.visibility = View.VISIBLE
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    llStartQuiz.visibility = View.VISIBLE
+                    progressLoadQuiz.visibility = View.GONE
+                    val intent = Intent(itemView.context, TakeQuizActivity::class.java)
+                    itemView.context.startActivity(intent)
+                }, 2000)
             }
         }
     }
