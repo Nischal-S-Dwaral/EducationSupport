@@ -12,16 +12,16 @@
         android:theme="@style/Theme.EducationSupport"
         tools:targetApi="31">
         <activity
+            android:name=".learner.ViewCourseActivity"
+            android:exported="false" />
+        <activity
             android:name=".learner.QuizResultActivity"
             android:exported="false"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance" />
         <activity
             android:name=".learner.TakeQuizActivity"
             android:exported="false"
-            android:launchMode="singleInstance"/>
-        <activity
-            android:name=".learner.QuizListActivity"
-            android:exported="false" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

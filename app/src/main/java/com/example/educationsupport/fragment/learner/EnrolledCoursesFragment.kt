@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 import com.example.educationsupport.adapters.learner.EnrolledCourseListCardAdapter
+import com.example.educationsupport.constants.EnrolledCoursesConstants
 
 class EnrolledCoursesFragment : Fragment() {
 
@@ -25,12 +26,15 @@ class EnrolledCoursesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_enrolled_courses, container, false)
 
         /**
+         * Get the enrolled course list
+         */
+        val enrolledCourseList = EnrolledCoursesConstants.enrolledCourseList()
+
+        /**
          * Set up my courses recycler view
          */
         enrolledCoursesListLayoutManager = LinearLayoutManager(view.context)
-        enrolledCoursesListAdaptor = EnrolledCourseListCardAdapter(arrayOf(
-            "Course 0", "Course 1", "Course 2", "Course 3", "Course 4", "Course 5"),
-            view.context)
+        enrolledCoursesListAdaptor = EnrolledCourseListCardAdapter(enrolledCourseList, view.context)
         enrolledCourseListRecyclerView = view.findViewById(R.id.rv_enrolled_courses_list_cards)
         enrolledCourseListRecyclerView.setHasFixedSize(true)
         enrolledCourseListRecyclerView.layoutManager = enrolledCoursesListLayoutManager

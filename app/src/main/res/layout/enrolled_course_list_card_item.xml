@@ -49,17 +49,16 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_study"
+                android:src="@drawable/ic_online_learning"
                 android:layout_margin="4dp"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_enrolled_course_list_card_collapsing_layout"
+            android:id="@+id/ll_enrolled_course_list_card_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <View
                 android:layout_width="match_parent"
@@ -71,55 +70,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginVertical="8dp"
-                android:id="@+id/ll_enrolled_download_course_contents">
+                android:id="@+id/ll_enrolled_course_contents">
 
                 <TextView
-                    android:id="@+id/tv_enrolled_download_course_contents"
-                    android:layout_width="0dp"
+                    android:id="@+id/tv_enrolled_course_description"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Download Course Contents - Coming Soon!"/>
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_right_arrow"/>
+                    android:text="This is a sample course description"/>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"/>
-
-            <LinearLayout
-                android:id="@+id/ll_enrolled_activities_quiz"
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="8dp">
-
-                <TextView
-                    android:id="@+id/tv_enrolled_course_quiz"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="View Activities"/>
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_right_arrow"/>
+                android:id="@+id/btn_enrolled_course_more_details"
+                android:text="More Details"
+                android:backgroundTint="@color/black"/>
 
             </LinearLayout>
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/btn_enrolled_course_list_card_collapse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_down_arrow"
-            android:background="@android:color/transparent"/>
 
     </LinearLayout>
 

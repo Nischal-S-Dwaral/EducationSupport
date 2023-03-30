@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import com.example.educationsupport.fragment.learner.CourseListFragment
 import com.example.educationsupport.fragment.learner.EnrolledCoursesFragment
 import com.example.educationsupport.fragment.learner.HomeFragment
-import com.example.educationsupport.fragment.learner.MyActivitiesFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -47,7 +46,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> selectedFragment(HomeFragment())
                 R.id.nav_course_list -> selectedFragment(CourseListFragment())
                 R.id.nav_enrolled_courses -> selectedFragment(EnrolledCoursesFragment())
-                R.id.nav_my_activities -> selectedFragment(MyActivitiesFragment())
             }
             return@setOnItemSelectedListener false
         }

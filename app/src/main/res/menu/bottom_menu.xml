@@ -20,10 +20,4 @@
         android:title="Enrolled Courses"
         android:icon="@drawable/ic_enrolled_courses"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/nav_my_activities"
-        android:title="My Activities"
-        android:icon="@drawable/ic_my_activities"
-        app:showAsAction="ifRoom"/>
 </menu>

@@ -5,31 +5,29 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
-import com.example.educationsupport.learner.QuizListActivity
+import com.example.educationsupport.constants.Constants
+import com.example.educationsupport.learner.ViewCourseActivity
+import com.example.educationsupport.model.Course
 
-class EnrolledCourseListCardAdapter(private val coursesDataset: Array<String>, private val context: Context) :
+class EnrolledCourseListCardAdapter(private val coursesDataset: ArrayList<Course>, private val context: Context) :
     RecyclerView.Adapter<EnrolledCourseListCardAdapter.ViewHolder?>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvEnrolledCourseTitle: TextView
-        var llEnrolledCourseListCardCollapsingLayout: LinearLayout
-        var llEnrolledActivitiesQuizLayout: LinearLayout
-        var llEnrolledDownloadCourseContents: LinearLayout
-        var buttonCollapse: ImageButton
-        var collpased : Boolean = true
+        var tvEnrolledCourseDescription: TextView
+        var btnMoreDetails : Button
 
         init {
             tvEnrolledCourseTitle = itemView.findViewById(R.id.tv_enrolled_course_title)
-            llEnrolledCourseListCardCollapsingLayout = itemView.findViewById(R.id.ll_enrolled_course_list_card_collapsing_layout)
-            llEnrolledActivitiesQuizLayout = itemView.findViewById(R.id.ll_enrolled_activities_quiz)
-            llEnrolledDownloadCourseContents = itemView.findViewById(R.id.ll_enrolled_download_course_contents)
-            buttonCollapse = itemView.findViewById(R.id.btn_enrolled_course_list_card_collapse)
+            tvEnrolledCourseDescription = itemView.findViewById(R.id.tv_enrolled_course_description)
+            btnMoreDetails = itemView.findViewById(R.id.btn_enrolled_course_more_details)
         }
     }
 
@@ -42,40 +40,30 @@ class EnrolledCourseListCardAdapter(private val coursesDataset: Array<String>, p
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val course = coursesDataset[position]
+
         /**
          * Set the Course Name to the card
          */
-        holder.tvEnrolledCourseTitle.text = coursesDataset[position]
+        holder.tvEnrolledCourseTitle.text = course.name
 
         /**
-         * Handling the Download Contents linear layout
+         * Set the course description to the card
          */
-        holder.llEnrolledDownloadCourseContents.setOnClickListener {
-            Toast.makeText(context, "COMING SOON!!", Toast.LENGTH_SHORT).show()
+        holder.tvEnrolledCourseDescription.text = buildString {
+            append(course.description.substring(0, course.description.length.coerceAtMost(100)))
+            append("...")
         }
 
         /**
          * Handling onClickListener for the take test layout
          */
-        holder.llEnrolledActivitiesQuizLayout.setOnClickListener {
-            val intent = Intent(context, QuizListActivity::class.java)
-            intent.putExtra("courseTitle", coursesDataset[position])
+        holder.btnMoreDetails.setOnClickListener {
+            val intent = Intent(context, ViewCourseActivity::class.java)
+            //TODO: Update this
+            intent.putExtra(Constants.COURSE_ID, course.id)
             context.startActivity(intent)
-        }
-
-        /**
-         * Handle the card collapsing event
-         */
-        holder.buttonCollapse.setOnClickListener {
-            if (holder.collpased) {
-                holder.collpased = false
-                holder.llEnrolledCourseListCardCollapsingLayout.visibility = View.VISIBLE
-                holder.buttonCollapse.setImageResource(R.drawable.ic_up_arrow)
-            } else {
-                holder.collpased = true
-                holder.llEnrolledCourseListCardCollapsingLayout.visibility = View.GONE
-                holder.buttonCollapse.setImageResource(R.drawable.ic_down_arrow)
-            }
         }
     }
 
