@@ -22,9 +22,9 @@
             <ImageView
                 android:id="@+id/youtube_logo"
                 android:layout_width="70dp"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_study"
+                android:src="@mipmap/ic_launcher"
                 android:contentDescription="EducationSupport"/>
 
             <RelativeLayout
