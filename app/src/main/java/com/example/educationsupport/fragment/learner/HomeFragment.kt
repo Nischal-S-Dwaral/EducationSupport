@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
-import com.example.educationsupport.adapters.learner.CourseCardAdapter
+import com.example.educationsupport.adapters.learner.HomeCourseCardAdapter
 import com.example.educationsupport.adapters.learner.MyActivitiesCardAdapter
 
 class HomeFragment : Fragment() {
 
     private lateinit var coursesRecyclerView: RecyclerView
     private lateinit var coursesLayoutManager: RecyclerView.LayoutManager
-    private lateinit var coursesAdaptor: CourseCardAdapter
+    private lateinit var coursesAdaptor: HomeCourseCardAdapter
 
     private lateinit var myActivitiesRecyclerView: RecyclerView
     private lateinit var myActivitiesLayoutManager: RecyclerView.LayoutManager
@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
          * Set up my courses recycler view
          */
         coursesLayoutManager = GridLayoutManager(view.context, 2)
-        coursesAdaptor = CourseCardAdapter(
+        coursesAdaptor = HomeCourseCardAdapter(
             arrayOf(
                 "Course 0", "Course 1", "Course 2", "Course 3", "Course 4", "Course 5"
             ),
