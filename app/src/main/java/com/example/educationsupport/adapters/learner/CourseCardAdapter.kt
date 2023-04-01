@@ -64,7 +64,7 @@ class CourseCardAdapter(private val courseList: ArrayList<CourseSearch>, private
         return object : Filter() {
 
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint?.toString() ?: ""
+                val charSearch = constraint?.toString()?.lowercase() ?: ""
                 if (charSearch.isEmpty()) {
                     courseFilterList = courseList
                 } else {

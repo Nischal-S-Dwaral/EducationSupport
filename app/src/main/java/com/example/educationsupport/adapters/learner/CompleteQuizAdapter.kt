@@ -1,14 +1,15 @@
 package com.example.educationsupport.adapters.learner
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
+import com.example.educationsupport.learner.QuizAnswerReviewActivity
 import com.example.educationsupport.model.Quiz
 
 class CompleteQuizAdapter(private val quizList: List<Quiz>, private val context: Context) :
@@ -44,7 +45,9 @@ class CompleteQuizAdapter(private val quizList: List<Quiz>, private val context:
         holder.tvCompletedQuizScoreViewProgress.text = quiz.score.toString()+"%"
 
         holder.itemView.setOnClickListener {
-            Toast.makeText(context, "Quiz Completed View Holder is clicked", Toast.LENGTH_SHORT).show()
+            //TODO Send data through the intent
+            val intent = Intent(context, QuizAnswerReviewActivity::class.java)
+            context.startActivity(intent)
         }
     }
 }
