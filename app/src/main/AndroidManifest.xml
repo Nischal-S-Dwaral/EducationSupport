@@ -26,7 +26,7 @@
             android:exported="false"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".LearnerMainActivity"
+            android:name=".EducatorMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
