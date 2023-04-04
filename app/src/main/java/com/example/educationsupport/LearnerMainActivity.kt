@@ -10,7 +10,7 @@ import com.example.educationsupport.fragment.learner.HomeFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class LearnerMainActivity : AppCompatActivity() {
 
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_learner_main)
 
         /**
          * Set up the toolbar
