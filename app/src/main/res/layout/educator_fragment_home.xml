@@ -35,7 +35,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
-                android:text="Courses Available"
+                android:text="My Courses"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="24sp"

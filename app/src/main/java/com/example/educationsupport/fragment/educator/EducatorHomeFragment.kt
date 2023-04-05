@@ -1,24 +1,22 @@
 package com.example.educationsupport.fragment.educator
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 import com.example.educationsupport.adapters.learner.EnrolledCourseListCardAdapter
-import com.example.educationsupport.adapters.learner.HomeCourseCardAdapter
-import com.example.educationsupport.adapters.learner.MyActivitiesCardAdapter
 import com.example.educationsupport.constants.EnrolledCoursesConstants
 
 class EducatorHomeFragment : Fragment() {
 
-    private lateinit var enrolledCourseListRecyclerView: RecyclerView
-    private lateinit var enrolledCoursesListLayoutManager: RecyclerView.LayoutManager
-    private lateinit var enrolledCoursesListAdaptor: EnrolledCourseListCardAdapter
+    private lateinit var myCourseListRecyclerView: RecyclerView
+    private lateinit var myCoursesListLayoutManager: RecyclerView.LayoutManager
+    //TODO: Different Adapter the Educator Course Details
+    private lateinit var myCoursesListAdaptor: EnrolledCourseListCardAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +34,12 @@ class EducatorHomeFragment : Fragment() {
         /**
          * Set up my courses recycler view
          */
-        enrolledCoursesListLayoutManager = LinearLayoutManager(view.context)
-        enrolledCoursesListAdaptor = EnrolledCourseListCardAdapter(enrolledCourseList, view.context)
-        enrolledCourseListRecyclerView = view.findViewById(R.id.educator_rv_enrolled_courses_list_cards)
-        enrolledCourseListRecyclerView.setHasFixedSize(true)
-        enrolledCourseListRecyclerView.layoutManager = enrolledCoursesListLayoutManager
-        enrolledCourseListRecyclerView.adapter = enrolledCoursesListAdaptor
+        myCoursesListLayoutManager = LinearLayoutManager(view.context)
+        myCoursesListAdaptor = EnrolledCourseListCardAdapter(enrolledCourseList, view.context)
+        myCourseListRecyclerView = view.findViewById(R.id.educator_rv_enrolled_courses_list_cards)
+        myCourseListRecyclerView.setHasFixedSize(true)
+        myCourseListRecyclerView.layoutManager = myCoursesListLayoutManager
+        myCourseListRecyclerView.adapter = myCoursesListAdaptor
 
         return view
     }
