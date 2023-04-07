@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.educationsupport.fragment.educator.AddNewCourseFragment
+import com.example.educationsupport.fragment.educator.AddNewLearnerFragment
 import com.example.educationsupport.fragment.educator.EducatorHomeFragment
 import com.example.educationsupport.fragment.learner.CourseListFragment
 import com.example.educationsupport.fragment.learner.EnrolledCoursesFragment
@@ -47,6 +48,7 @@ class EducatorMainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.educator_nav_home -> selectedFragment(EducatorHomeFragment())
                 R.id.educator_add_course -> selectedFragment(AddNewCourseFragment())
+                R.id.educator_add_leaner -> selectedFragment(AddNewLearnerFragment())
             }
             return@setOnItemSelectedListener false
         }

@@ -14,4 +14,10 @@
         android:title="Add Courses"
         android:icon="@drawable/baseline_add_circle_24"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/educator_add_leaner"
+        android:title="Add Learner"
+        android:icon="@drawable/baseline_add_circle_24"
+        app:showAsAction="ifRoom"/>
 </menu>
