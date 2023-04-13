@@ -1,4 +1,4 @@
-package com.example.educationsupport
+package com.example.educationsupport.educator
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.educationsupport.R
 import com.example.educationsupport.model.Question
 
 class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {

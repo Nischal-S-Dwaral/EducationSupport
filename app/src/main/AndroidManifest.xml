@@ -29,10 +29,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ViewQuizActivity"
+            android:name=".educator.ViewQuizActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateQuizActivity"
+            android:name=".educator.CreateQuizActivity"
             android:exported="false" />
         <activity
             android:name=".learner.QuizAnswerReviewActivity"

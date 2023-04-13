@@ -1,10 +1,12 @@
-package com.example.educationsupport
+package com.example.educationsupport.educator
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import com.example.educationsupport.EducatorMainActivity
+import com.example.educationsupport.R
 import com.example.educationsupport.constants.QuestionsConstants
 import com.example.educationsupport.model.Question
 

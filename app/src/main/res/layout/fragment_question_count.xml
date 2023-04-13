@@ -6,7 +6,7 @@
     style="@style/Theme.AppCompat.Dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".QuestionCountFragment">
+    tools:context=".fragment.educator.QuestionCountFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

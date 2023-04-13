@@ -1,17 +1,16 @@
-package com.example.educationsupport
+package com.example.educationsupport.fragment.educator
 
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
-import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.learner.QuizResultActivity
+import com.example.educationsupport.R
+import com.example.educationsupport.educator.CreateQuizActivity
 
 class QuestionCountFragment : DialogFragment() {
 

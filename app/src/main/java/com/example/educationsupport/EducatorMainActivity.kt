@@ -7,9 +7,7 @@ import androidx.fragment.app.Fragment
 import com.example.educationsupport.fragment.educator.AddNewCourseFragment
 import com.example.educationsupport.fragment.educator.AddNewLearnerFragment
 import com.example.educationsupport.fragment.educator.EducatorHomeFragment
-import com.example.educationsupport.fragment.learner.CourseListFragment
-import com.example.educationsupport.fragment.learner.EnrolledCoursesFragment
-import com.example.educationsupport.fragment.learner.HomeFragment
+import com.example.educationsupport.fragment.educator.QuestionCountFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
