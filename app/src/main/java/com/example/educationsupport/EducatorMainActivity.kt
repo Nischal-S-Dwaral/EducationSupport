@@ -49,6 +49,7 @@ class EducatorMainActivity : AppCompatActivity() {
                 R.id.educator_nav_home -> selectedFragment(EducatorHomeFragment())
                 R.id.educator_add_course -> selectedFragment(AddNewCourseFragment())
                 R.id.educator_add_leaner -> selectedFragment(AddNewLearnerFragment())
+                R.id.add_quiz_nav -> selectedFragment(QuestionCountFragment())
             }
             return@setOnItemSelectedListener false
         }
