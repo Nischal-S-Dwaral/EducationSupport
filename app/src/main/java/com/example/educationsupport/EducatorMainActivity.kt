@@ -47,7 +47,7 @@ class EducatorMainActivity : AppCompatActivity() {
                 R.id.educator_nav_home -> selectedFragment(EducatorHomeFragment())
                 R.id.educator_add_course -> selectedFragment(AddNewCourseFragment())
                 R.id.educator_add_leaner -> selectedFragment(AddNewLearnerFragment())
-                R.id.add_quiz_nav -> selectedFragment(QuestionCountFragment())
+                R.id.add_quiz_nav -> openPopUp()
             }
             return@setOnItemSelectedListener false
         }
@@ -62,5 +62,9 @@ class EducatorMainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout, fragment)
         transaction.commit()
+    }
+    private fun openPopUp(){
+        val showPopUp = QuestionCountFragment()
+        showPopUp.show(supportFragmentManager,"showPopUp")
     }
 }
