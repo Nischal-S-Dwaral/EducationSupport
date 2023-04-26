@@ -43,7 +43,7 @@ class CourseListFragment : Fragment() {
         /**
          * Search view filtering
          */
-        searchView = view.findViewById(R.id.search_view_course_list)
+        searchView = view.findViewById(R.id.search_view_learner_list)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {

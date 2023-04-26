@@ -8,64 +8,109 @@
     android:orientation="vertical"
     tools:context=".fragment.educator.AddNewCourseFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/educator_add_coursename_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="409dp"
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/educator_add_coursename_layout"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="409dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        android:hint="Course Name"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/educator_new_course_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="36dp"-->
+<!--            android:inputType="text" />-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/educator_add_coursedescription_layout"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="409dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        android:hint="Course Description"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/educator_add_coursename_layout">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/educator_new_course_description"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="186dp"-->
+<!--            android:gravity="top"-->
+<!--            android:inputType="textMultiLine"-->
+<!--            android:lines="6"-->
+<!--            android:overScrollMode="always"-->
+<!--            android:scrollbarStyle="insideInset"-->
+<!--            android:scrollbars="vertical"-->
+<!--            android:scrollHorizontally="false" />-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+    <TextView
+        android:id="@+id/newCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="New Course"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/addCourseName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="63dp"
+        android:ems="10"
         android:hint="Course Name"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/newCourse" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/educator_new_course_name"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/educator_add_coursedescription_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Course Description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/educator_new_course_description"
-            android:layout_width="match_parent"
-            android:layout_height="212dp"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:lines="6"
-            android:overScrollMode="always"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="vertical"
-            android:scrollHorizontally="false" />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/educator_addcourse_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="#3CE14B"
         android:text="Confirm"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/educator_add_coursedescription_layout"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine"
         tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/editTextTextMultiLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Course Description"
+        android:inputType="textMultiLine"
+        android:lines="6"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="false"
+        app:layout_constraintTop_toBottomOf="@+id/addCourseName" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

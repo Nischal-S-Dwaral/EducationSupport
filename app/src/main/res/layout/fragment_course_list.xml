@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_view_course_list"
+                android:id="@+id/search_view_learner_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/search_view_bg"
