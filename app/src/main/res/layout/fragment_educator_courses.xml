@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".fragment.educator.EducatorHomeFragment">
+    tools:context=".fragment.educator.EducatorCoursesFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        android:id="@+id/educator_courses_list_nested_scroll_view">
+        android:id="@+id/enrolled_courses_list_nested_scroll_view">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -22,20 +22,20 @@
             <ImageView
                 android:id="@+id/bgImage"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_course_list"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/educator_tv_enrolled_courses"
+                android:id="@+id/tv_educator_courses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
-                android:text="My Courses"
+                android:text="Published Courses"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="24sp"
@@ -45,7 +45,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/bgImage" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/educator_rv_educator_courses_list_cards"
+                android:id="@+id/rv_educator_courses_list_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -58,7 +58,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/educator_tv_enrolled_courses"/>
+                app:layout_constraintTop_toBottomOf="@+id/tv_educator_courses"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

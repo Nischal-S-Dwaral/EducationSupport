@@ -7,6 +7,7 @@ object QuizListConstants {
     fun getQuizList() : ArrayList<Quiz> {
         val quiz1 = Quiz(
             1,
+            "1",
             "Quiz-1",
             "This is Quiz-1",
             true,
@@ -15,6 +16,7 @@ object QuizListConstants {
 
         val quiz2 = Quiz(
             2,
+            "1",
             "Quiz-2",
             "This is Quiz-2",
             true,
@@ -23,6 +25,7 @@ object QuizListConstants {
 
         val quiz3 = Quiz(
             1,
+            "1",
             "Quiz-3",
             "This is Quiz-3",
             true,
@@ -31,6 +34,7 @@ object QuizListConstants {
 
         val quiz4 = Quiz(
             4,
+            "1",
             "Quiz-4",
             "This is Quiz-4",
             false,
@@ -39,6 +43,7 @@ object QuizListConstants {
 
         val quiz5 = Quiz(
             1,
+            "1",
             "Quiz-5",
             "This is Quiz-5",
             false,
@@ -47,6 +52,7 @@ object QuizListConstants {
 
         val quiz6 = Quiz(
             1,
+            "1",
             "Quiz-6",
             "This is Quiz-6",
             false,
@@ -62,5 +68,16 @@ object QuizListConstants {
         quizList.add(quiz6)
 
         return quizList
+    }
+
+    fun getQuizListById(i: String): List<Quiz> {
+        val quizList = this.getQuizList();
+        val courseQuizList = ArrayList<Quiz>()
+        for(ql in quizList){
+            if(ql.courseId == i){
+                courseQuizList.add(ql);
+            }
+        }
+        return courseQuizList;
     }
 }
