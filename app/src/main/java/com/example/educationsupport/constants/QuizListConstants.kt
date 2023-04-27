@@ -1,8 +1,9 @@
 package com.example.educationsupport.constants
 
+import com.example.educationsupport.model.Course
 import com.example.educationsupport.model.Quiz
 
-object QuizListConstants {
+object  QuizListConstants {
 
     fun getQuizList() : ArrayList<Quiz> {
         val quiz1 = Quiz(
@@ -11,7 +12,8 @@ object QuizListConstants {
             "Quiz-1",
             "This is Quiz-1",
             true,
-            80
+            80,
+             LearnerConstants.getLearnerList()
         )
 
         val quiz2 = Quiz(
@@ -20,7 +22,8 @@ object QuizListConstants {
             "Quiz-2",
             "This is Quiz-2",
             true,
-            45
+            45,
+            LearnerConstants.getLearnerList()
         )
 
         val quiz3 = Quiz(
@@ -29,7 +32,8 @@ object QuizListConstants {
             "Quiz-3",
             "This is Quiz-3",
             true,
-            68
+            68,
+            LearnerConstants.getLearnerList()
         )
 
         val quiz4 = Quiz(
@@ -38,7 +42,8 @@ object QuizListConstants {
             "Quiz-4",
             "This is Quiz-4",
             false,
-            0
+            0,
+            LearnerConstants.getLearnerList()
         )
 
         val quiz5 = Quiz(
@@ -47,7 +52,8 @@ object QuizListConstants {
             "Quiz-5",
             "This is Quiz-5",
             false,
-            0
+            0,
+            LearnerConstants.getLearnerList()
         )
 
         val quiz6 = Quiz(
@@ -56,7 +62,8 @@ object QuizListConstants {
             "Quiz-6",
             "This is Quiz-6",
             false,
-            0
+            0,
+            LearnerConstants.getLearnerList()
         )
 
         val quizList = ArrayList<Quiz>()
@@ -79,5 +86,16 @@ object QuizListConstants {
             }
         }
         return courseQuizList;
+    }
+
+    fun getQuizById(quizId: Int): Quiz? {
+        val quizList = this.getQuizList();
+        var quz: Quiz? = null
+        for(q in quizList){
+            if(q.id == quizId) {
+                quz = q
+            }
+        }
+        return quz;
     }
 }

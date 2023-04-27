@@ -6,5 +6,6 @@ data class Quiz(
     val title: String,
     val description: String,
     val isCompleted: Boolean,
-    val score: Int
+    val score: Int,
+    val learnerList: List<Learner>
 )

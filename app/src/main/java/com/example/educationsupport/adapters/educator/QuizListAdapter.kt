@@ -11,7 +11,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
-import com.example.educationsupport.educator.ViewQuizActivity
+//import com.example.educationsupport.educator.ViewQuizActivity
+import com.example.educationsupport.educator.ViewQuizAndScore
 import com.example.educationsupport.model.Quiz
 
 class QuizListAdapter(private val quizList: List<Quiz>?, private val context: Context) :
@@ -40,7 +41,8 @@ class QuizListAdapter(private val quizList: List<Quiz>?, private val context: Co
 
             Handler(Looper.getMainLooper()).postDelayed({
                 holder.progressLoadQuiz.visibility = View.GONE
-                val intent = Intent(context, ViewQuizActivity::class.java)
+                //val intent = Intent(context, ViewQuizActivity::class.java)
+                val intent = Intent(context, ViewQuizAndScore::class.java)
                 context.startActivity(intent)
             }, 2000)
         }

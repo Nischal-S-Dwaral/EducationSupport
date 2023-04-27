@@ -21,7 +21,7 @@ class CompleteQuizAdapter(private val quizList: List<Quiz>, private val context:
         var tvCompletedQuizScoreViewProgress: TextView
 
         init {
-            tvCompletedQuizName = itemView.findViewById(R.id.tv_completed_quiz_name)
+            tvCompletedQuizName = itemView.findViewById(R.id.tv_learner_name)
             progressBar = itemView.findViewById(R.id.quiz_score_progress_bar)
             tvCompletedQuizScoreViewProgress = itemView.findViewById(R.id.completed_quiz_score_text_view_progress)
         }

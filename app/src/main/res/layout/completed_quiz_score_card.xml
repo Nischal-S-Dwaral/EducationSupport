@@ -24,7 +24,7 @@
             android:text="Quiz-1"
             android:textSize="24dp"
             android:textColor="@android:color/black"
-            android:id="@+id/tv_completed_quiz_name"/>
+            android:id="@+id/tv_learner_name"/>
         
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -56,6 +56,14 @@
                 app:layout_constraintStart_toStartOf="@+id/quiz_score_progress_bar"
                 app:layout_constraintTop_toTopOf="@+id/quiz_score_progress_bar"
                 tools:text="80%" />
+
+            <TextView
+                android:id="@+id/quiz_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                tools:layout_editor_absoluteX="128dp"
+                tools:layout_editor_absoluteY="28dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

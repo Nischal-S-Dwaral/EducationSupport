@@ -64,6 +64,8 @@ class ViewCourseActivity : AppCompatActivity() {
         tvDescription.text = course.description
 
         val quizList = course.quizList
+
+
         val startQuizList = filterQuizList(quizList, false)
         val completedQuizList = filterQuizList(quizList, true)
 
