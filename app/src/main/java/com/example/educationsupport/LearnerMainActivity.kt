@@ -1,5 +1,6 @@
 package com.example.educationsupport
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -9,11 +10,13 @@ import com.example.educationsupport.fragment.learner.EnrolledCoursesFragment
 import com.example.educationsupport.fragment.learner.HomeFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import de.hdodenhof.circleimageview.CircleImageView
 
 class LearnerMainActivity : AppCompatActivity() {
 
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var userProfileImage: CircleImageView
 
     private lateinit var appBarLayout: AppBarLayout
 
@@ -36,6 +39,15 @@ class LearnerMainActivity : AppCompatActivity() {
          * Replacing App Bar
          */
         appBarLayout = findViewById(R.id.appBar)
+
+        /**
+         * Initialise circle image view and add on click listener
+         */
+        userProfileImage = findViewById(R.id.user_profile_image)
+        userProfileImage.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
 
         /**
          * Set up the navigation view
