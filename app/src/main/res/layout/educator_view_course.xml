@@ -94,9 +94,13 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/ic_menu_add"
+                    android:backgroundTint="#8BC34A"
+                    android:foregroundTint="#8BC34A"
                     android:tooltipText="Add Quiz"
+                    app:iconTint="@color/ic_launcher_background"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
