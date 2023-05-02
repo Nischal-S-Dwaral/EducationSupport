@@ -1,6 +1,5 @@
 package com.example.educationsupport.constants
 
-import com.example.educationsupport.model.Course
 import com.example.educationsupport.model.Quiz
 
 object  QuizListConstants {

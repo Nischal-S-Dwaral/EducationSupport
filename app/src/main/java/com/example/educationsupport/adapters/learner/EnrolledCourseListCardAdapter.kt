@@ -6,17 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.learner.ViewCourseActivity
-import com.example.educationsupport.model.Course
+import com.example.educationsupport.model.Course1
 
-class EnrolledCourseListCardAdapter(private val coursesDataset: ArrayList<Course>, private val context: Context) :
+class EnrolledCourseListCardAdapter(private val coursesDataset: ArrayList<Course1>, private val context: Context) :
     RecyclerView.Adapter<EnrolledCourseListCardAdapter.ViewHolder?>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

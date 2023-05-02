@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.educator.EducatorCourseActivity
-import com.example.educationsupport.model.Course
+import com.example.educationsupport.model.Course1
 
-class EducatorCourseListCardAdapter(private val coursesDataset: ArrayList<Course>, private val context: Context) :
+class EducatorCourseListCardAdapter(private val coursesDataset: ArrayList<Course1>, private val context: Context) :
     RecyclerView.Adapter<EducatorCourseListCardAdapter.ViewHolder?>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
