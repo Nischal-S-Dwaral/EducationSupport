@@ -16,7 +16,7 @@ import com.example.educationsupport.R
 import com.example.educationsupport.adapters.learner.CompleteQuizAdapter
 import com.example.educationsupport.adapters.learner.StartQuizAdapter
 import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.constants.ViewCourseConstants
+import com.example.educationsupport.constants.QuizListConstants
 import com.example.educationsupport.model.Course
 import com.example.educationsupport.model.EnrolledCourse
 import com.example.educationsupport.model.Quiz
@@ -118,7 +118,7 @@ class ViewCourseActivity : AppCompatActivity() {
                     checkIfLearnerEnrolledCourse(course)
 
                     //TODO: Get Quiz List
-                    val quizList = ViewCourseConstants.getCourse().quizList
+                    val quizList = QuizListConstants.getQuizList()
                     val startQuizList = filterQuizList(quizList, false)
 
                     /**
@@ -138,27 +138,50 @@ class ViewCourseActivity : AppCompatActivity() {
     private fun checkIfLearnerEnrolledCourse(course: Course) {
 
         val enrolledCourseDatabaseReference = FirebaseDatabase.getInstance().getReference("EnrolledCourses")
-        val checkIfEnrolledCourseQuery = enrolledCourseDatabaseReference
-            .orderByChild("courseId").equalTo(course.id)
 
-        checkIfEnrolledCourseQuery.addValueEventListener(object : ValueEventListener {
+        /**
+         * Get if the list of enrolled courses for the learnerId
+         */
+        val checkIfEnrolledCourseQuery = enrolledCourseDatabaseReference
+            .orderByChild("learnerId")
+            .equalTo(currentUser.uid)
+
+        checkIfEnrolledCourseQuery.addListenerForSingleValueEvent(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
+                var foundEnrolledCourse = false
                 if (snapshot.exists()) {
-                    //TODO: Get Completed Quiz List
-                    val quizList = ViewCourseConstants.getCourse().quizList
-                    val completedQuizList = filterQuizList(quizList, true)
+                    for (enrolledCourseSnapchat in snapshot.children) {
+                        /**
+                         * Checks for the courseId for the learnerId
+                         */
+                        val courseId = enrolledCourseSnapchat.child("courseId").getValue(String::class.java)
+                        if (courseId.equals(course.id)) {
+                            foundEnrolledCourse = true
 
+                            //TODO: Get Completed Quiz List
+                            val quizList = QuizListConstants.getQuizList()
+                            val completedQuizList = filterQuizList(quizList, true)
+
+                            /**
+                             * Setup the completed quiz list recycler view
+                             */
+                            //TODO: This should be inside get quiz result list and firebase implementation
+                            completedQuizListAdapter = CompleteQuizAdapter(completedQuizList, this@ViewCourseActivity)
+                            completedQuizListRecyclerView.adapter = completedQuizListAdapter
+                        }
+                    }
+
+                }
+
+               if (foundEnrolledCourse) {
+                   // an enrolled course with the desired course ID was found
+                   tvCompletedQuizResultHeader.visibility = View.VISIBLE
+                   enrollButton.visibility = View.GONE
+               } else {
                     /**
-                     * Setup the completed quiz list recycler view
+                     * If not enrolled, don't need to show the completed quiz list
                      */
-                    //TODO: This should be inside get quiz result list and firebase implementation
-                    completedQuizListAdapter = CompleteQuizAdapter(completedQuizList, this@ViewCourseActivity)
-                    completedQuizListRecyclerView.adapter = completedQuizListAdapter
-                } else {
-                    /**
-                    * If not enrolled, don't need to show the completed quiz list
-                    */
                     tvCompletedQuizResultHeader.visibility = View.GONE
                     enrollButton.visibility = View.VISIBLE
 

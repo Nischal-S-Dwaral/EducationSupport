@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.learner.ViewCourseActivity
-import com.example.educationsupport.model.Course1
+import com.example.educationsupport.model.EnrolledCourse
 
-class EnrolledCourseListCardAdapter(private val coursesDataset: ArrayList<Course1>, private val context: Context) :
+class EnrolledCourseListCardAdapter(private val enrolledCoursesDataset: ArrayList<EnrolledCourse>, private val context: Context) :
     RecyclerView.Adapter<EnrolledCourseListCardAdapter.ViewHolder?>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,18 +38,19 @@ class EnrolledCourseListCardAdapter(private val coursesDataset: ArrayList<Course
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val course = coursesDataset[position]
+        val enrolledCourse = enrolledCoursesDataset[position]
 
         /**
          * Set the Course Name to the card
          */
-        holder.tvEnrolledCourseTitle.text = course.name
+        holder.tvEnrolledCourseTitle.text = enrolledCourse.courseName
 
         /**
          * Set the course description to the card
          */
         holder.tvEnrolledCourseDescription.text = buildString {
-            append(course.description.substring(0, course.description.length.coerceAtMost(100)))
+            append(enrolledCourse.courseDescription?.substring(0, enrolledCourse.courseDescription.length.coerceAtMost(100))
+                ?: "Default Course Description")
             append("...")
         }
 
@@ -58,13 +59,12 @@ class EnrolledCourseListCardAdapter(private val coursesDataset: ArrayList<Course
          */
         holder.btnMoreDetails.setOnClickListener {
             val intent = Intent(context, ViewCourseActivity::class.java)
-            //TODO: Update this
-            intent.putExtra(Constants.COURSE_ID, course.id)
+            intent.putExtra(Constants.COURSE_ID, enrolledCourse.courseId)
             context.startActivity(intent)
         }
     }
 
     override fun getItemCount(): Int {
-        return coursesDataset.size
+        return enrolledCoursesDataset.size
     }
 }

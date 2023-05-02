@@ -48,17 +48,31 @@
                 android:id="@+id/rv_enrolled_courses_list_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:overScrollMode="never"
+                android:layout_marginEnd="8dp"
                 android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_enrolled_courses"/>
+                app:layout_constraintTop_toBottomOf="@+id/tv_enrolled_courses" />
+
+            <TextView
+                android:id="@+id/tv_no_enrolled_courses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Currently not enrolled to any courses"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="32dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_enrolled_courses"
+                android:visibility="gone"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
