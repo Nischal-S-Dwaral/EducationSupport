@@ -1,6 +1,7 @@
 package com.example.educationsupport.adapters.learner
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
+import com.example.educationsupport.constants.Constants
+import com.example.educationsupport.learner.ViewCourseActivity
+import com.example.educationsupport.model.Course
 import com.example.educationsupport.model.CourseSearch
 
-class CourseCardAdapter(private val courseList: ArrayList<CourseSearch>, private val context: Context) :
+class CourseCardAdapter(private val courseList: ArrayList<Course>, private val context: Context) :
     RecyclerView.Adapter<CourseCardAdapter.ViewHolder>(), Filterable {
 
-    var courseFilterList = ArrayList<CourseSearch>()
+    var courseFilterList = ArrayList<Course>()
 
     init {
         courseFilterList = courseList
@@ -45,10 +49,19 @@ class CourseCardAdapter(private val courseList: ArrayList<CourseSearch>, private
         /**
          * Set the course name and educator name
          */
-        holder.tvCourseTitle.text = course.courseName
+        holder.tvCourseTitle.text = course.name
         holder.tvEducatorName.text = buildString {
             append("By: ")
-            append(course.educatorName)
+            append(course.educatorId)
+        }
+
+        /**
+         * Handling onClickListener for the take test layout
+         */
+        holder.linearLayoutCard.setOnClickListener {
+            val intent = Intent(context, ViewCourseActivity::class.java)
+            intent.putExtra(Constants.COURSE_ID, course.id.toString())
+            context.startActivity(intent)
         }
     }
 
@@ -68,10 +81,10 @@ class CourseCardAdapter(private val courseList: ArrayList<CourseSearch>, private
                 if (charSearch.isEmpty()) {
                     courseFilterList = courseList
                 } else {
-                    val filteredList = ArrayList<CourseSearch>()
+                    val filteredList = ArrayList<Course>()
                     courseList
                         .filter {
-                            (it.courseName.lowercase().contains(constraint!!))
+                            (it.name!!.lowercase().contains(constraint!!))
                         }
                         .forEach { filteredList.add(it) }
 
@@ -85,7 +98,7 @@ class CourseCardAdapter(private val courseList: ArrayList<CourseSearch>, private
                 courseFilterList = if (results?.values == null)
                     ArrayList()
                 else
-                    results.values as ArrayList<CourseSearch>
+                    results.values as ArrayList<Course>
                 notifyDataSetChanged()
             }
         }
