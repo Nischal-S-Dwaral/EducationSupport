@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             Toast.makeText(
-                this@LoginActivity, "Already Logged in.",
+                this@LoginActivity, "User Logged In.",
                 Toast.LENGTH_SHORT
             ).show()
             startActivityBasedOnUser(currentUser)

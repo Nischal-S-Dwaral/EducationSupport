@@ -56,6 +56,18 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_view_course_activity_enroll"
+                android:backgroundTint="@color/black"
+                android:padding="10dp"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="ENROLL"
+                android:visibility="gone"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +83,7 @@
                 android:id="@+id/tv_view_course_description"
                 android:textColor="@color/black"
                 android:layout_marginBottom="20dp"
-                android:text="This is a random description This is a random description This is a random description This is a random description This is a random description This is a random description "/>
+                android:text="This is a random description."/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -79,6 +91,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:text="TAKE QUIZ"
+                android:id="@+id/tv_view_course_learner_take_quiz"
                 android:layout_marginBottom="5dp"
                 android:textSize="25dp"/>
 
@@ -94,6 +107,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:text="COMPLETED QUIZ RESULT"
+                android:id="@+id/tv_view_course_learner_completed_quiz_result"
                 android:layout_marginBottom="5dp"
                 android:textSize="25dp"/>
 
