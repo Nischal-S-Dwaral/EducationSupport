@@ -117,6 +117,14 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                     val opt2 = option2.text.toString()
                     val opt3 = option3.text.toString()
                     val opt4 = option4.text.toString()
+                    var correctAnswer = ""
+
+                    for (i in 0 until mSelectedCorrectAnswers.size) {
+                        correctAnswer += mSelectedCorrectAnswers[i].toString()
+                        if (i < mSelectedCorrectAnswers.size - 1) {
+                            correctAnswer += ", "
+                        }
+                    }
 
                     val ques = QuestionModel(
                         quesTxt,
@@ -124,7 +132,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                         opt2,
                         opt3,
                         opt4,
-                        ArrayList(mSelectedCorrectAnswers)
+                        correctAnswer
                     )
                     //Adding questions to List
                     mQuestionsList.add(ques)

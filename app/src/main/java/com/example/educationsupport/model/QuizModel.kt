@@ -1,9 +1,9 @@
 package com.example.educationsupport.model
 
 data class QuizModel(
-    val id: String,
-    val name: String,
-    val courseId: String,
-    val educatorId: String,
-    val questionList: ArrayList<QuestionModel>
+    val id: String? = null,
+    val name: String? = null,
+    val courseId: String? = null,
+    val educatorId: String? = null,
+    val questionList: List<QuestionModel> = emptyList()
 )
