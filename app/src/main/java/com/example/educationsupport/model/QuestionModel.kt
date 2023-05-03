@@ -6,5 +6,5 @@ data class QuestionModel(
     val optionTwo: String,
     val optionThree: String,
     val optionFour: String,
-    val correctAnswer: Int
+    val correctAnswer: List<Int>
 )
