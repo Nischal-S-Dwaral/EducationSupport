@@ -9,8 +9,8 @@ import com.example.educationsupport.R
 import com.example.educationsupport.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 
 class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var progressBar: ProgressBar
@@ -34,9 +34,11 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     private var count: Int = 0
     private var quizName: String? = null
     private var courseName: String? = null
+    private var courseId: String? = null
     var currentEducatorUser: FirebaseUser? = null
 
-    private lateinit var databaseReference: DatabaseReference
+    private lateinit var databaseReference: DatabaseReference //for adding quiz
+    private lateinit var dbRef: DatabaseReference //to get courseId
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +69,26 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         quizName = intent.getStringExtra("quizName").toString()
         courseName = intent.getStringExtra("courseName").toString()
         titleText.text = titleText.text.toString() + "$quizName"
+
+        //Getting CourseId based on courseName
+        dbRef = FirebaseDatabase.getInstance().reference.child("Courses")
+        dbRef.orderByChild("name").equalTo(courseName)
+        dbRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                 for(c in snapshot.children){
+                     val course = c.getValue(Course::class.java)
+                     courseId = course!!.id
+                 }
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
 
         setQuestion()
 
@@ -144,7 +166,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                     val quiz = QuizModel(
                         quizId,
                         quizName!!,
-                        "-NURpVh7jtMu5SgkmQFk",
+                        courseId,
                         currentEducatorUser!!.uid,
                         mQuestionsList
                     )
