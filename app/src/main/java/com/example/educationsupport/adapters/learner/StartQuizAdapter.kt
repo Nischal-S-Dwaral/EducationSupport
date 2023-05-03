@@ -12,10 +12,15 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
+import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.learner.TakeQuizActivity
-import com.example.educationsupport.model.Quiz
+import com.example.educationsupport.model.QuizModel
 
-class StartQuizAdapter(private val quizList: List<Quiz>, private val context: Context) :
+class StartQuizAdapter(
+    private val courseId: String?,
+    private val quizList: List<QuizModel>,
+    private val context: Context
+) :
     RecyclerView.Adapter<StartQuizAdapter.ViewHolder>(){
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,7 +41,7 @@ class StartQuizAdapter(private val quizList: List<Quiz>, private val context: Co
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvQuizName.text = quizList[position].title
+        holder.tvQuizName.text = quizList[position].name
 
         holder.itemView.setOnClickListener {
             holder.llStartQuiz.visibility = View.GONE
@@ -46,6 +51,8 @@ class StartQuizAdapter(private val quizList: List<Quiz>, private val context: Co
                 holder.llStartQuiz.visibility = View.VISIBLE
                 holder.progressLoadQuiz.visibility = View.GONE
                 val intent = Intent(context, TakeQuizActivity::class.java)
+                intent.putExtra(Constants.QUIZ_ID, quizList[position].id)
+                intent.putExtra(Constants.COURSE_ID, courseId)
                 context.startActivity(intent)
             }, 2000)
         }

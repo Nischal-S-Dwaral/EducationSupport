@@ -20,6 +20,7 @@ import com.example.educationsupport.constants.QuizListConstants
 import com.example.educationsupport.model.Course
 import com.example.educationsupport.model.EnrolledCourse
 import com.example.educationsupport.model.Quiz
+import com.example.educationsupport.model.QuizModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -117,16 +118,34 @@ class ViewCourseActivity : AppCompatActivity() {
                      */
                     checkIfLearnerEnrolledCourse(course)
 
-                    //TODO: Get Quiz List
-                    val quizList = QuizListConstants.getQuizList()
-                    val startQuizList = filterQuizList(quizList, false)
+                    val quizDatabaseReference = FirebaseDatabase.getInstance().reference.child("Quiz")
+                    val quizListQuery = quizDatabaseReference
+                        .orderByChild("courseId")
+                        .equalTo(course.id)
 
-                    /**
-                     * Setup the start quiz list recycler view
-                     */
-                    //TODO: This should be inside get quiz list and firebase implementation
-                    startQuizListAdapter = StartQuizAdapter(startQuizList, this@ViewCourseActivity)
-                    startQuizListRecyclerView.adapter = startQuizListAdapter
+                    quizListQuery.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val startQuizList = mutableListOf<QuizModel>()
+                            if (snapshot.exists()) {
+                                for (quizSnapshot in snapshot.children) {
+                                    val quizModel = quizSnapshot.getValue(QuizModel::class.java)
+                                    if (quizModel != null) {
+                                        startQuizList.add(quizModel)
+                                    }
+                                }
+                                /**
+                                 * Setup the start quiz list recycler view
+                                 */
+                                startQuizListAdapter = StartQuizAdapter(course.id, startQuizList, this@ViewCourseActivity)
+                                startQuizListRecyclerView.adapter = startQuizListAdapter
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Toast.makeText(this@ViewCourseActivity, error.message, Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
                 }
             }
             override fun onCancelled(error: DatabaseError) {

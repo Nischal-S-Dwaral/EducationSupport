@@ -10,19 +10,23 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.constants.QuestionsConstants
-import com.example.educationsupport.model.Question
+import com.example.educationsupport.model.QuestionModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mCurrentQuestion: Int = 1
-    private var mQuestionsList: ArrayList<Question>? = null
-    private var mSelectedOptionPosition: Int = 0
+    private var mQuestionsList: ArrayList<QuestionModel>? = null
+    private var mSelectedOptionPosition: ArrayList<Int> = arrayListOf()
     private var mCorrectAnswers: Int = 0
 
     private lateinit var questionTextView: TextView
@@ -55,18 +59,52 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
          */
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        /**
-         * Get the question list
-         */
-        mQuestionsList = QuestionsConstants.getQuestions()
-
-        setQuestion()
-
         optionOneTextView.setOnClickListener(this)
         optionTwoTextView.setOnClickListener(this)
         optionThreeTextView.setOnClickListener(this)
         optionFourTextView.setOnClickListener(this)
         submitButton.setOnClickListener(this)
+
+        /**
+        * Take value passed from the Intent
+        */
+        val quizId = intent.getStringExtra(Constants.QUIZ_ID).toString()
+        val courseId = intent.getStringExtra(Constants.COURSE_ID).toString()
+
+        /**
+         * Get the question list
+         */
+        getQuestionList(quizId, courseId)
+    }
+
+    private fun getQuestionList(quizId: String, courseId: String) {
+
+        val quizDatabaseReference = FirebaseDatabase.getInstance().getReference("Quiz")
+            .child(quizId).child("questionList")
+
+        quizDatabaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val questionList = mutableListOf<QuestionModel>()
+                if (snapshot.exists()) {
+                    for (questionSnapshot in snapshot.children) {
+                        val question = questionSnapshot.getValue(QuestionModel::class.java)
+                        if (question != null) {
+                            questionList.add(question)
+                        }
+                    }
+                    mQuestionsList = questionList as ArrayList<QuestionModel>
+                    setQuestion()
+                } else {
+                    Toast.makeText(this@TakeQuizActivity, "Can't start this quiz!!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@TakeQuizActivity, error.message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
     }
 
     /**
@@ -147,7 +185,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                 /**
                  * We have to move to the next question
                  */
-                if (mSelectedOptionPosition == 0) {
+                if (mSelectedOptionPosition.isEmpty()) {
                     mCurrentQuestion++
 
                     when {
@@ -169,15 +207,38 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                      * Setting the background of the options with wrong and correct answers color
                      */
                     val question = mQuestionsList!![mCurrentQuestion-1]
-                    if (question!!.correctAnswer != mSelectedOptionPosition) {
-                        answerView(mSelectedOptionPosition, R.drawable.wrong_quiz_option_border_bg)
-                    } else {
+
+                    /**
+                     * Sort the correct answers and the chosen answers
+                     */
+                    mSelectedOptionPosition.sort()
+                    val correctAnswerList = question!!.correctAnswer?.split(", ")?.sorted()
+                        ?.toMutableList()
+
+                    /**
+                     * Check if the selected options match the correct options
+                     */
+                    var isCorrectAnswer = true
+                    for (index in mSelectedOptionPosition.indices) {
+                        if (mSelectedOptionPosition[index] != (correctAnswerList?.get(index)
+                                ?.toInt() ?: -1)
+                        ) {
+                            answerView(mSelectedOptionPosition[index], R.drawable.wrong_quiz_option_border_bg)
+                            isCorrectAnswer = false
+                        }
+                    }
+
+                    if (isCorrectAnswer) {
                         /**
                          * Increment the correct answer count
                          */
                         mCorrectAnswers++
                     }
-                    answerView(question!!.correctAnswer, R.drawable.correct_quiz_option_border_bg)
+                    if (correctAnswerList != null) {
+                        for (index in correctAnswerList.indices) {
+                            answerView(correctAnswerList[index].toInt(), R.drawable.correct_quiz_option_border_bg)
+                        }
+                    }
 
                     /**
                      * Making the options non clickable
@@ -195,7 +256,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                     } else {
                         submitButton.text = "GO TO NEXT QUESTION"
                     }
-                    mSelectedOptionPosition = 0
+                    mSelectedOptionPosition.clear()
                 }
             }
         }
@@ -230,20 +291,30 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun selectedOptionView(tv: TextView, selectedOptionNum: Int) {
-        defaultOptionsView()
-        mSelectedOptionPosition = selectedOptionNum
+        if (mSelectedOptionPosition.contains(selectedOptionNum)) {
 
-        tv.setTextColor(Color.parseColor("#363A43"))
-        tv.setTypeface(tv.typeface, Typeface.BOLD)
-        tv.background = ContextCompat.getDrawable(
-            this,
-            R.drawable.selected_quiz_option_border_bg
-        )
+            tv.setTextColor(Color.parseColor("#7A8089"))
+            tv.typeface = Typeface.DEFAULT
+            tv.background = ContextCompat.getDrawable(
+                this,
+                R.drawable.default_quiz_option_border_bg
+            )
+        } else {
+            mSelectedOptionPosition.add(selectedOptionNum)
+
+            tv.setTextColor(Color.parseColor("#363A43"))
+            tv.setTypeface(tv.typeface, Typeface.BOLD)
+            tv.background = ContextCompat.getDrawable(
+                this,
+                R.drawable.selected_quiz_option_border_bg
+            )
+        }
     }
 
     /**
      * Show when the user clicks back button while taking the quiz
      */
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.MyAlertDialogStyle))
         builder.setMessage("Are you sure you want to exit? Clicking on Yes, will clear your progress!")
