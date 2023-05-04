@@ -14,8 +14,9 @@ import com.example.educationsupport.R
 //import com.example.educationsupport.educator.ViewQuizActivity
 import com.example.educationsupport.educator.ViewQuizAndScore
 import com.example.educationsupport.model.Quiz
+import com.example.educationsupport.model.QuizModel
 
-class QuizListAdapter(private val quizList: List<Quiz>?, private val context: Context) :
+class QuizListAdapter(private val quizList: List<QuizModel>?, private val context: Context) :
     RecyclerView.Adapter<QuizListAdapter.ViewHolder>(){
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,7 +35,7 @@ class QuizListAdapter(private val quizList: List<Quiz>?, private val context: Co
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvQuizName.text = quizList!![position].title
+        holder.tvQuizName.text = quizList!![position].name
 
         holder.itemView.setOnClickListener {
            holder.progressLoadQuiz.visibility = View.VISIBLE

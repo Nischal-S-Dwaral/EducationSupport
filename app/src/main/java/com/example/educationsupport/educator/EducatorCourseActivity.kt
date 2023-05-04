@@ -1,7 +1,9 @@
 package com.example.educationsupport.educator
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
@@ -10,18 +12,25 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.educationsupport.EducatorMainActivity
 import com.example.educationsupport.R
 import com.example.educationsupport.adapters.educator.QuizListAdapter
+import com.example.educationsupport.adapters.educator.QuizQuestionAdapter
 import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.constants.EducatorCourseConstants
 import com.example.educationsupport.constants.QuizListConstants
 import com.example.educationsupport.fragment.educator.QuestionCountFragment
+import com.example.educationsupport.model.QuestionModel
 import com.example.educationsupport.model.Quiz
-import com.example.educationsupport.educator.ViewQuizAndScore
+import com.example.educationsupport.model.QuizModel
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 
 class EducatorCourseActivity : AppCompatActivity() {
 
-    private var courseId: Int = 0
+    private var courseId: String? = null
+    private var courseName: String? = null
+    private var courseDesc: String? = null
     private lateinit var toolbar: Toolbar
 
     private lateinit var tvDescription: TextView
@@ -30,8 +39,8 @@ class EducatorCourseActivity : AppCompatActivity() {
     private lateinit var quizListLayoutManager: LinearLayoutManager
     private lateinit var quizListAdapter: QuizListAdapter
 
+    private lateinit var databaseReference: DatabaseReference
    private lateinit var addQuizBtn: Button
-   private lateinit var test: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,56 +49,76 @@ class EducatorCourseActivity : AppCompatActivity() {
         /**
          * Take value passed from the Intent
          */
-        courseId = intent.getIntExtra(Constants.COURSE_ID, -1)
+        courseId = intent.getStringExtra(Constants.COURSE_ID).toString()
+        courseName = intent.getStringExtra("courseName").toString()
+        courseDesc = intent.getStringExtra("courseDesc").toString()
+
+        addQuizBtn = findViewById(R.id.addQuizButton);
 
         /**
          * Remove the time and battery etc top bar
          */
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-
-        /**
-         * Get the course information
-         */
-        val course = EducatorCourseConstants.getEducatorCourseById(courseId)
-
-        val quizList = QuizListConstants.getQuizListById(courseId.toString());
-
-        addQuizBtn = findViewById(R.id.addQuizButton);
-
-        addQuizBtn.setOnClickListener {
-            val showPopUp = QuestionCountFragment()
-            showPopUp.show(supportFragmentManager,"showPopUp")
-        }
         /**
          * Set the toolbar
          */
         toolbar = findViewById(R.id.view_course_toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = course?.name
+        supportActionBar!!.title = courseName
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         /**
          * Set the description
          */
         tvDescription = findViewById(R.id.tv_view_course_description)
-        tvDescription.text = course?.description
-        test = findViewById(R.id.Test)
+        tvDescription.text = courseDesc
+
+
 
         /**
-         * Setup the start quiz list recycler view
+         * Get the QUIZ list of the course
          */
-        quizListLayoutManager = LinearLayoutManager(this@EducatorCourseActivity)
-        quizListAdapter = QuizListAdapter(quizList, this@EducatorCourseActivity)
-        quizListRecyclerView = findViewById(R.id.rv_view_quiz_list)
-        quizListRecyclerView.setHasFixedSize(true)
-        quizListRecyclerView.layoutManager = quizListLayoutManager
-        quizListRecyclerView.adapter = quizListAdapter
 
-        test.setOnClickListener{
-            val intent = Intent(this, ViewQuizAndScore::class.java)
-            startActivity(intent)
+        databaseReference = FirebaseDatabase.getInstance().reference.child("Quiz")
+        databaseReference.orderByChild("courseId").equalTo(courseId)
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val quizList = mutableListOf <QuizModel>()
+                    for(data in snapshot.children){
+                        val quiz = data.getValue(QuizModel::class.java)
+                        if(quiz!=null){
+                        quizList.add(quiz)
+                        }
+                   }
+                    /**
+                     * Setup the start quiz list recycler view
+                     */
+                    quizListLayoutManager = LinearLayoutManager(this@EducatorCourseActivity)
+                    quizListAdapter = QuizListAdapter(quizList, this@EducatorCourseActivity)
+                    quizListRecyclerView = findViewById(R.id.rv_view_quiz_list)
+                    quizListRecyclerView.setHasFixedSize(true)
+                    quizListRecyclerView.layoutManager = quizListLayoutManager
+                    quizListRecyclerView.adapter = quizListAdapter
+
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+                Log.w(ContentValues.TAG, "loadPost:onCancelled", error.toException())
+            }
+        })
+
+
+
+        addQuizBtn.setOnClickListener {
+            val showPopUp = QuestionCountFragment()
+            showPopUp.show(supportFragmentManager,"showPopUp")
         }
+
         }
 
     private fun filterQuizList(quizList: List<Quiz>, isQuizCompleted : Boolean): List<Quiz> {

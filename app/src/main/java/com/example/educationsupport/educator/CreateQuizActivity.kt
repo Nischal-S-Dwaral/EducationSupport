@@ -68,7 +68,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         count = (intent.getStringExtra("count")).toString().toInt()
         quizName = intent.getStringExtra("quizName").toString()
         courseName = intent.getStringExtra("courseName").toString()
-        titleText.text = titleText.text.toString() + "$quizName"
+        titleText.text = titleText.text.toString()+":" + "$quizName"
 
         //Getting CourseId based on courseName
         dbRef = FirebaseDatabase.getInstance().reference.child("Courses")
@@ -89,9 +89,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
             }
 
         })
-
         setQuestion()
-
         op1Chkbox.setOnClickListener(this)
         op2Chkbox.setOnClickListener(this)
         op3Chkbox.setOnClickListener(this)
@@ -131,67 +129,69 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.submitBtn -> {
+                val validFields = validateFields(view)
+                if(validFields) {
+                    if (mSelectedCorrectAnswers.isNotEmpty()) {
 
-                if (mSelectedCorrectAnswers.isNotEmpty()) {
+                        val quesTxt = question.text.toString()
+                        val opt1 = option1.text.toString()
+                        val opt2 = option2.text.toString()
+                        val opt3 = option3.text.toString()
+                        val opt4 = option4.text.toString()
+                        var correctAnswer = ""
 
-                    val quesTxt = question.text.toString()
-                    val opt1 = option1.text.toString()
-                    val opt2 = option2.text.toString()
-                    val opt3 = option3.text.toString()
-                    val opt4 = option4.text.toString()
-                    var correctAnswer = ""
-
-                    for (i in 0 until mSelectedCorrectAnswers.size) {
-                        correctAnswer += mSelectedCorrectAnswers[i].toString()
-                        if (i < mSelectedCorrectAnswers.size - 1) {
-                            correctAnswer += ", "
+                        for (i in 0 until mSelectedCorrectAnswers.size) {
+                            correctAnswer += mSelectedCorrectAnswers[i].toString()
+                            if (i < mSelectedCorrectAnswers.size - 1) {
+                                correctAnswer += ", "
+                            }
                         }
+
+                        val ques = QuestionModel(
+                            quesTxt,
+                            opt1,
+                            opt2,
+                            opt3,
+                            opt4,
+                            correctAnswer
+                        )
+                        //Adding questions to List
+                        mQuestionsList.add(ques)
+                        mSelectedCorrectAnswers.clear()
                     }
+                    if (mCurrentQuestion == count) {
+                        val quizId = databaseReference.push().key!!
 
-                    val ques = QuestionModel(
-                        quesTxt,
-                        opt1,
-                        opt2,
-                        opt3,
-                        opt4,
-                        correctAnswer
-                    )
-                    //Adding questions to List
-                    mQuestionsList.add(ques)
-                    mSelectedCorrectAnswers.clear()
-                }
-                if (mCurrentQuestion == count) {
-                    val quizId = databaseReference.push().key!!
+                        val quiz = QuizModel(
+                            quizId,
+                            quizName!!,
+                            courseId,
+                            currentEducatorUser!!.uid,
+                            mQuestionsList
+                        )
 
-                    val quiz = QuizModel(
-                        quizId,
-                        quizName!!,
-                        courseId,
-                        currentEducatorUser!!.uid,
-                        mQuestionsList
-                    )
-
-                    databaseReference.child(quizId).setValue(quiz)
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                view.context,
-                                "Added Quiz Successfully!!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            val intent = Intent(this, ViewQuizActivity::class.java)
-                            intent.putExtra("quizId", quizId);
-                            startActivity(intent)
-                            finish()
-                        }.addOnFailureListener {
-                            Toast.makeText(
-                                view.context,
-                                "Error!! ${it.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                } else {
-                    mCurrentQuestion++;
-                    setQuestion()
+                        databaseReference.child(quizId).setValue(quiz)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    view.context,
+                                    "Added Quiz Successfully!!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(this, ViewQuizActivity::class.java)
+                                intent.putExtra("quizId", quizId);
+                                startActivity(intent)
+                                finish()
+                            }.addOnFailureListener {
+                                Toast.makeText(
+                                    view.context,
+                                    "Error!! ${it.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    } else {
+                        mCurrentQuestion++;
+                        setQuestion()
+                    }
                 }
             }
             R.id.correctOp1 -> {
@@ -212,6 +212,37 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
             }
 
         }
+    }
+
+    private fun validateFields(view: View): Boolean {
+        var flag = true
+        if(question.text.toString().isEmpty()) {
+            question.error = "Question missing"
+            flag = false
+        }
+        if(option1.text.toString().isEmpty()) {
+            option1.error = "Option 1 missing"
+            flag = false
+        }
+        if(option2.text.toString().isEmpty()) {
+            option2.error = "Option 2 missing"
+            flag = false
+        }
+        if(option3.text.toString().isEmpty()) {
+            option3.error = "Option 3 missing"
+            flag = false
+        }
+        if(option4.text.toString().isEmpty()) {
+            option4.error = "Option 4 missing"
+            flag = false
+        }
+        if(mSelectedCorrectAnswers.isEmpty()){
+            Toast.makeText(view.context,"Please select correct answers",Toast.LENGTH_SHORT).show()
+            flag = false
+        }
+
+        return flag
+
     }
 
 

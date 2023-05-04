@@ -61,6 +61,8 @@ class EducatorCourseListCardAdapter(private val coursesDataset: ArrayList<Course
             val intent = Intent(context, EducatorCourseActivity::class.java)
             //TODO: Update this
             intent.putExtra(Constants.COURSE_ID, course.id)
+            intent.putExtra("courseName",course.name)
+            intent.putExtra("courseDesc",course.description)
             context.startActivity(intent)
         }
     }

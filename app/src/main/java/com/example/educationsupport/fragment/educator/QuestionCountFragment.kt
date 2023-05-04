@@ -11,17 +11,11 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.educationsupport.R
-import com.example.educationsupport.adapters.educator.EducatorCourseListCardAdapter
-import com.example.educationsupport.constants.CourseListConstants
 import com.example.educationsupport.educator.CreateQuizActivity
-import com.example.educationsupport.model.Course
-import com.example.educationsupport.model.EnrolledCourse
-import com.example.educationsupport.model.Quiz
 import com.example.educationsupport.model.QuizModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 
 class QuestionCountFragment() : DialogFragment() {
 
@@ -42,70 +36,77 @@ class QuestionCountFragment() : DialogFragment() {
         val view: View = inflater.inflate(R.layout.fragment_question_count, container, false)
         courseSpinner = view.findViewById(R.id.courseSpinner)
         currentUser = FirebaseAuth.getInstance().currentUser!!
+        okBtn = view.findViewById(R.id.buttonOK)
+        count = view.findViewById(R.id.questionCount)
+        activityName = view.findViewById(R.id.activityNameEditText)
 
 
         var courseList = ArrayList<String>()
         courseList.add("Select Course")
 
-
+        //Fetching Course Names created by current Educator
         databaseReference = FirebaseDatabase.getInstance().reference.child("Courses")
         databaseReference.orderByChild("educatorId").equalTo(currentUser.uid)
-
         databaseReference.addValueEventListener(object : ValueEventListener{
-
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()) {
                     for(course in snapshot.children){
                         val courseData = course.getValue(QuizModel::class.java)
                         courseList.add(courseData!!.name!!)
-
                     }
-
-                    val arrayAdp = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,courseList)
-                    courseSpinner.adapter = arrayAdp
-
-                    courseSpinner.onItemSelectedListener = object :
-                        AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(parent: AdapterView<*>,
-                                                    view: View, position: Int, id: Long) {
-                            courseSelected = courseList[position].toString()
-                            print(courseList)
-
-                        }
-
-                        override fun onNothingSelected(p0: AdapterView<*>?) {
-                            TODO("Not yet implemented")
-                        }
-                    }
-
-                    okBtn = view.findViewById(R.id.buttonOK)
-                    okBtn.setOnClickListener {
-                        count = view.findViewById(R.id.questionCount)
-                        val quesCount = count.text.toString();
-                        activityName = view.findViewById(R.id.activityNameEditText)
-                        val quizName = " "+activityName.text.toString();
-
-                        intent = Intent(requireContext(), CreateQuizActivity::class.java);
-                        intent.putExtra("count", quesCount)
-                        intent.putExtra("quizName", quizName)
-                        intent.putExtra("courseName",courseSelected) //use this to link quiz to course
-                        startActivity(intent)
-                    }
-
-
                 }
                 }
-
-
-
-
-            override fun onCancelled(error: DatabaseError) {
+           override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
                 Log.w(ContentValues.TAG, "loadPost:onCancelled", error.toException())
             }
         })
 
+        //Setting course name list to dropdown
+        val arrayAdp = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,courseList)
+        courseSpinner.adapter = arrayAdp
+        courseSpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>,
+                                        view: View, position: Int, id: Long) {
+                courseSelected = courseList[position]
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        okBtn.setOnClickListener {
+            val flag = validateFields(view)
+            if(flag){
+                val quizName = " "+activityName.text.toString();
+                val quesCount = count.text.toString();
+
+                intent = Intent(requireContext(), CreateQuizActivity::class.java);
+                intent.putExtra("count", quesCount)
+                intent.putExtra("quizName", quizName)
+                intent.putExtra("courseName", courseSelected) //use this to link quiz to course
+                startActivity(intent)
+            }
+        }
 
         return view;
+    }
+
+    private fun validateFields(view: View): Boolean {
+        var flag = true
+        if(activityName.text.toString().isEmpty()){
+            activityName.error = "Name is missing"
+            flag = false;
+        }
+        if(count.text.toString().isEmpty()){
+            count.error = "Question count missing"
+            flag = false;
+        }
+        if(courseSelected.isEmpty() || courseSelected.equals("Select Course")) {
+            Toast.makeText(view.context, "Select valid course", Toast.LENGTH_SHORT).show()
+            flag = false
+        }
+        return flag
     }
 }
