@@ -19,7 +19,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var txtInputPwd: TextInputEditText
     private lateinit var btnRegister: Button
     private lateinit var educatorRadioButton: RadioButton
-
+    private lateinit var txtInputUsername: TextInputEditText
     /**
      * For Firebase authentication
      */
@@ -37,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
         txtInputPwd = findViewById(R.id.register_password_edit_text)
         btnRegister = findViewById(R.id.btn_register)
         educatorRadioButton = findViewById(R.id.register_educator_radio_btn)
-
+        txtInputUsername = findViewById(R.id.register_username_edit_text)
 
         /**
          * Initialise Firebase authentication
@@ -53,6 +53,7 @@ class RegisterActivity : AppCompatActivity() {
         btnRegister.setOnClickListener {
             val email: String = txtInputEmail.text.toString()
             val password: String = txtInputPwd.text.toString()
+            val username: String = txtInputUsername.text.toString()
 
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(this@RegisterActivity, "Please enter email address", Toast.LENGTH_SHORT).show()
@@ -62,7 +63,10 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this@RegisterActivity, "Please enter password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
+            if (TextUtils.isEmpty(username)) {
+                Toast.makeText(this@RegisterActivity, "Please enter username", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -74,6 +78,7 @@ class RegisterActivity : AppCompatActivity() {
                             user.email?.let { it1 -> map.put("email", it1) }
                             user.uid.let { it2 -> map.put("uid", it2)}
                             map["isEducator"] = educatorRadioButton.isChecked
+                            map["username"] = username
                         }
 
                         /**
