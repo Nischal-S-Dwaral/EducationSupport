@@ -1,5 +1,6 @@
 package com.example.educationsupport.fragment.educator
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +8,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.educationsupport.EducatorMainActivity
 import com.example.educationsupport.R
+import com.example.educationsupport.constants.Constants
+import com.example.educationsupport.learner.ViewCourseActivity
 import com.example.educationsupport.model.Course
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+
 
 class AddNewCourseFragment : Fragment() {
 
@@ -47,6 +52,9 @@ class AddNewCourseFragment : Fragment() {
             if (currentEducatorUser != null) {
                 saveCourseData(currentEducatorUser.uid, view)
             }
+            val intent = Intent(context, EducatorMainActivity::class.java)
+//            intent.putExtra(Constants.COURSE_ID, course.id.toString())
+            context?.startActivity(intent)
         }
         return view
     }
