@@ -9,11 +9,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
-//import com.example.educationsupport.learner.QuizAnswerReviewActivity
-import com.example.educationsupport.model.Learner
+import com.example.educationsupport.constants.Constants
+import com.example.educationsupport.learner.QuizAnswerReviewActivity
+import com.example.educationsupport.model.LearnerScore
 
-class LearnerScoreAdapter(private val learnerList: List<Learner>, private val context: Context) :
+class LearnerScoreAdapter(private val learnerScoreList: ArrayList<LearnerScore>, private val context: Context) :
     RecyclerView.Adapter<LearnerScoreAdapter.ViewHolder>() {
+
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvLearnerName: TextView
@@ -33,33 +35,23 @@ class LearnerScoreAdapter(private val learnerList: List<Learner>, private val co
     }
 
     override fun getItemCount(): Int {
-        return learnerList.size
+        return learnerScoreList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val learner = learnerList[position]
+        val learner = learnerScoreList[position]
 
-        holder.tvLearnerName.text = learner.name
+        holder.tvLearnerName.text = learner.learnerName
 
-//        val correctAnswers = learner.correctAnswer
-//        val totalQuestions = learner.totalQuestion
-
-//        val resultString = buildString {
-//            append(correctAnswers)
-//            append(" out of ")
-//            append(totalQuestions)
-//        }
-//
-//        holder.learnerQuizScore.text = resultString
-        //holder.scoreTitle.text = "Learners Score"
-        holder.progressBar.progress = learner.score
-        holder.tvCompletedQuizScoreViewProgress.text = learner.score.toString()+"%"
+        holder.progressBar.progress = learner.scorePercentage
+        holder.tvCompletedQuizScoreViewProgress.text = learner.scorePercentage.toString()+"%"
 
         holder.itemView.setOnClickListener {
             //TODO Send data through the intent
-//            val intent = Intent(context, QuizAnswerReviewActivity::class.java)
-//            context.startActivity(intent)
+            val intent = Intent(context, QuizAnswerReviewActivity::class.java)
+            intent.putExtra(Constants.QUIZ_RESULT_ID, learner.quizResultId)
+            context.startActivity(intent)
         }
     }
 }

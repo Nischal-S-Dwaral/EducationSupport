@@ -59,15 +59,14 @@
 
             <TextView
                 android:id="@+id/learner_quiz_score"
-                android:layout_width="33dp"
-                android:layout_height="45dp"
-                android:textSize="19dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.658"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.644" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintBottom_toBottomOf="@+id/quiz_score_progress_bar"
+                app:layout_constraintEnd_toEndOf="@id/quiz_score_progress_bar"
+                app:layout_constraintStart_toStartOf="@+id/quiz_score_progress_bar"
+                app:layout_constraintTop_toTopOf="@+id/quiz_score_progress_bar"
+                tools:text="80%" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
