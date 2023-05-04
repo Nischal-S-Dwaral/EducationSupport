@@ -43,7 +43,6 @@ class QuizAnswerReviewActivity : AppCompatActivity() {
          */
         toolbar = findViewById(R.id.quiz_answer_review_toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = "Review Answers"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         /**
@@ -74,6 +73,7 @@ class QuizAnswerReviewActivity : AppCompatActivity() {
                             val quizResult = snapshot.getValue(QuizResultModel::class.java)
 
                             if (quizResult != null) {
+                                supportActionBar!!.title = quizResult.quizName
                                 quizScore.text = "Your Score: ${quizResult.correctAnswerScore} out of ${quizResult.totalQuestionScore}"
 
                                 quizAnswerReviewAnswerAdapter = ReviewAnswerAdapter(quizResult.answeredQuestionList, this@QuizAnswerReviewActivity)

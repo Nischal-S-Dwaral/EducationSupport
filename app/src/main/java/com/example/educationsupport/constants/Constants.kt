@@ -7,4 +7,5 @@ object Constants {
     const val CORRECT_ANSWERS: String = "correct_answers"
     const val QUIZ_ID: String = "quiz_Id"
     const val QUIZ_RESULT_ID: String = "quiz_Id"
+    const val QUIZ_NAME: String = "quiz_name"
 }
