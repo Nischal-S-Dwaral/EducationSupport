@@ -69,7 +69,7 @@ class EducatorCoursesFragment : Fragment() {
 //                    myCoursesListAdaptor = EducatorCourseListCardAdapter(educatorCourseList, view.context)
 //                    myCourseListRecyclerView.adapter = myCoursesListAdaptor
                     //give me code to print the educatorCourseList
-                    educatorCourseList.forEach { println(it) }
+//                    educatorCourseList.forEach { println(it) }
 
 //                    myCourseListRecyclerView.visibility = View.VISIBLE
                 }

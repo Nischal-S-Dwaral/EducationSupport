@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,165 +8,80 @@
     android:orientation="vertical"
     tools:context=".fragment.educator.AddNewLearnerFragment">
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/educator_add_learner_layout"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--        android:layout_width="409dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:layout_marginEnd="32dp"-->
-<!--        android:hint="Learner Email"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/educator_new_learner_email"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:inputType="textEmailAddress" />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-
-    <TextView
-        android:id="@+id/addLearner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="Add Learner"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <EditText
-        android:id="@+id/addLearnerEmailId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Learner Email"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addLearner" />
-
-    <EditText
-        android:id="@+id/addLearnerCourseName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Learner Course"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addLearnerEmailId" />
-
-    <!--Search view for filtering list view-->
-
-    <!--List View from which data is to be searched
-         for different programming languages-->
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/idSV"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        android:iconifiedByDefault="false"
-        android:padding="4dp"
-        android:queryHint="Search Programming language"
-        app:layout_constraintBottom_toTopOf="@+id/idLVProgrammingLanguages"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addLearnerCourseName"
-        app:layout_constraintVertical_bias="0.3" />
+        android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/idLVProgrammingLanguages"
-        android:layout_width="96dp"
-        android:layout_height="277dp"
-        android:layout_below="@id/idSV"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/educator_addlearner_confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.057"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addLearnerCourseName"
-        app:layout_constraintVertical_bias="0.484" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        android:background="@android:drawable/editbox_background"
-        android:drawableRight="@android:drawable/arrow_down_float"
-        android:drawablePadding="16dp"
-        android:hint="Select Language"
-        android:padding="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/educator_addlearner_confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idSV" />
+            <Spinner
+                android:id="@+id/select_course_spinner"
+                style="@android:style/Widget.Holo.Light.Spinner"
+                android:layout_width="341dp"
+                android:layout_height="74dp"
+                android:layout_alignBottom="@id/educator_addlearner_confirm"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/search_view_add_learner_list"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/educator_addlearner_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#3CE14B"
-        android:text="Confirm"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.472"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addLearnerCourseName"
-        app:layout_constraintVertical_bias="0.78" />
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view_add_learner_list"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/search_view_bg"
+                android:textCursorDrawable="@null"
+                app:iconifiedByDefault="false"
+                app:layout_constraintBottom_toTopOf="@+id/rv_learner_list_cards"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/select_course_spinner"
+                app:queryBackground="@null" />
 
-    <!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/textInputLayoutAddNewLearner"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="32dp"-->
-<!--        android:layout_marginTop="70dp"-->
-<!--        android:layout_marginEnd="32dp"-->
-<!--        android:clickable="true"-->
-<!--        android:hint="Learner Email"-->
-<!--        app:endIconMode="clear_text"-->
-<!--        app:hintAnimationEnabled="true"-->
-<!--        app:hintEnabled="true"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_learner_list_cards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="24dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                app:layout_constraintBottom_toTopOf="@+id/educator_addlearner_confirm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/search_view_add_learner_list" />
 
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/textInputEditTextAddNewLearner"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content" />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-<!--    &lt;!&ndash;        app:layout_constraintTop_toBottomOf="@+id/educator_add_learner_layout"&ndash;&gt;-->
-<!--&lt;!&ndash;        tools:visibility="visible" &ndash;&gt;-->
-<!--    />-->
+            <Button
+                android:id="@+id/educator_addlearner_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#3CE14B"
+                android:text="Confirm"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.472"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_learner_list_cards" />
 
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
