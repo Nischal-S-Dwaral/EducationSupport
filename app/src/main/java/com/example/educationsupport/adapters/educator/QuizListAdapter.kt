@@ -44,6 +44,8 @@ class QuizListAdapter(private val quizList: List<QuizModel>?, private val contex
                 holder.progressLoadQuiz.visibility = View.GONE
                 //val intent = Intent(context, ViewQuizActivity::class.java)
                 val intent = Intent(context, ViewQuizAndScore::class.java)
+                intent.putExtra("quizId",quizList!![position].id)
+                intent.putExtra("quizName",quizList!![position].name)
                 context.startActivity(intent)
             }, 2000)
         }

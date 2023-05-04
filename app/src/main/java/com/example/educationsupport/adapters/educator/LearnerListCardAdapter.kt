@@ -1,5 +1,6 @@
 package com.example.educationsupport.adapters.educator
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -9,14 +10,15 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.educator.EducatorCourseActivity
 import com.example.educationsupport.learner.ViewCourseActivity
-import com.example.educationsupport.model.Course
-import com.example.educationsupport.model.Course1
-import com.example.educationsupport.model.Learner
-import com.example.educationsupport.model.Users
+import com.example.educationsupport.model.*
+import com.google.firebase.database.FirebaseDatabase
 
-class LearnerListCardAdapter(private val LearnerDataset: ArrayList<Users>, private val context: Context) :
+class LearnerListCardAdapter(
+    private val LearnerDataset: ArrayList<Users>,
+    private val context: Context,
+    private val course: Course
+) :
     RecyclerView.Adapter<LearnerListCardAdapter.ViewHolder?>(), Filterable {
 
     var learnerFilterList = ArrayList<Users>()
@@ -27,13 +29,13 @@ class LearnerListCardAdapter(private val LearnerDataset: ArrayList<Users>, priva
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var linearLayoutCard: LinearLayout
-        var tvCourseTitle: TextView
-        var tvEducatorName: TextView
+        var tvLearnerEmail: TextView
+        var tvLearnerId: TextView
 
         init {
             linearLayoutCard = itemView.findViewById(R.id.ll_learner_list_card)
-            tvCourseTitle = itemView.findViewById(R.id.tv_learner_list_course_title)
-            tvEducatorName = itemView.findViewById(R.id.tv_learner_list_educator_name)
+            tvLearnerEmail = itemView.findViewById(R.id.tv_learner_list_course_title)
+            tvLearnerId = itemView.findViewById(R.id.tv_learner_list_educator_name)
         }
     }
 
@@ -44,13 +46,15 @@ class LearnerListCardAdapter(private val LearnerDataset: ArrayList<Users>, priva
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        val enrolledCourseDatabaseReference = FirebaseDatabase.getInstance().getReference("EnrolledCourses")
+
         val learner = learnerFilterList[position]
 
         /**
          * Set the course name and educator name
          */
-        holder.tvCourseTitle.text = learner.email
-        holder.tvEducatorName.text = buildString {
+        holder.tvLearnerEmail.text = learner.email
+        holder.tvLearnerId.text = buildString {
             append("By: ")
             append(learner.uid)
         }
@@ -59,9 +63,34 @@ class LearnerListCardAdapter(private val LearnerDataset: ArrayList<Users>, priva
          * Handling onClickListener for the take test layout
          */
         holder.linearLayoutCard.setOnClickListener {
-            val intent = Intent(context, ViewCourseActivity::class.java)
-            intent.putExtra(Constants.COURSE_ID, learner.uid.toString())
-            context.startActivity(intent)
+
+            val builder = AlertDialog.Builder(context)
+            builder.setMessage("Are you sure you want to add this learner to your course?")
+                .setCancelable(true)
+                .setPositiveButton("Yes") { dialog, id ->
+
+                    val enrolledCourseId = enrolledCourseDatabaseReference.push().key!!
+                    val enrolledCourse = EnrolledCourse(
+                        enrolledCourseId,
+                        course.name,
+                        course.description,
+                        course.id,
+                        learner.uid
+                    )
+
+                    enrolledCourseDatabaseReference.child(enrolledCourseId).setValue(enrolledCourse)
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Enrolled Learner Successfully!!", Toast.LENGTH_SHORT)
+                                .show()
+
+                        }.addOnFailureListener {
+                            Toast.makeText(context, "Error!! ${it.message}", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                }
+            val alert = builder.create()
+            alert.show()
         }
     }
 
