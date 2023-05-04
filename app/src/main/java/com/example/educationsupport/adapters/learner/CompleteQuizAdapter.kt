@@ -9,10 +9,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
+import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.learner.QuizAnswerReviewActivity
-import com.example.educationsupport.model.Quiz
+import com.example.educationsupport.model.QuizResultModel
 
-class CompleteQuizAdapter(private val quizList: List<Quiz>, private val context: Context) :
+class CompleteQuizAdapter(private val quizResultList: ArrayList<QuizResultModel>, private val context: Context) :
     RecyclerView.Adapter<CompleteQuizAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -33,20 +34,26 @@ class CompleteQuizAdapter(private val quizList: List<Quiz>, private val context:
     }
 
     override fun getItemCount(): Int {
-        return quizList.size
+        return quizResultList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val quiz = quizList[position]
+        val quizResult = quizResultList[position]
+        val countCorrectAnswer = quizResult.correctAnswerScore ?: 0
+        val countTotalQuestion = quizResult.totalQuestionScore ?: 0
 
-        holder.tvCompletedQuizName.text = quiz.title
-        holder.progressBar.progress = quiz.score
-        holder.tvCompletedQuizScoreViewProgress.text = quiz.score.toString()+"%"
+        val quizScore = countCorrectAnswer * 100/countTotalQuestion
+
+        holder.tvCompletedQuizName.text = quizResult.quizName
+        holder.progressBar.progress = quizScore
+        holder.tvCompletedQuizScoreViewProgress.text = quizScore.toString()+"%"
 
         holder.itemView.setOnClickListener {
             //TODO Send data through the intent
             val intent = Intent(context, QuizAnswerReviewActivity::class.java)
+            intent.putExtra(Constants.QUIZ_RESULT_ID, quizResult.id)
+            intent.putExtra(Constants.COURSE_ID, quizResult.courseId)
             context.startActivity(intent)
         }
     }

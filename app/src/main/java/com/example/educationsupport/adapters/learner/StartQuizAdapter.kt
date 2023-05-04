@@ -53,6 +53,7 @@ class StartQuizAdapter(
                 val intent = Intent(context, TakeQuizActivity::class.java)
                 intent.putExtra(Constants.QUIZ_ID, quizList[position].id)
                 intent.putExtra(Constants.COURSE_ID, courseId)
+                intent.putExtra(Constants.QUIZ_NAME, quizList[position].name)
                 context.startActivity(intent)
             }, 2000)
         }

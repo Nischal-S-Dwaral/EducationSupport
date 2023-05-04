@@ -16,11 +16,7 @@ import com.example.educationsupport.R
 import com.example.educationsupport.adapters.learner.CompleteQuizAdapter
 import com.example.educationsupport.adapters.learner.StartQuizAdapter
 import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.constants.QuizListConstants
-import com.example.educationsupport.model.Course
-import com.example.educationsupport.model.EnrolledCourse
-import com.example.educationsupport.model.Quiz
-import com.example.educationsupport.model.QuizModel
+import com.example.educationsupport.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -178,16 +174,33 @@ class ViewCourseActivity : AppCompatActivity() {
                         if (courseId.equals(course.id)) {
                             foundEnrolledCourse = true
 
-                            //TODO: Get Completed Quiz List
-                            val quizList = QuizListConstants.getQuizList()
-                            val completedQuizList = filterQuizList(quizList, true)
+                            FirebaseDatabase.getInstance().getReference("QuizResult")
+                                .orderByChild("learnerId").equalTo(currentUser.uid)
+                                .addValueEventListener(object : ValueEventListener {
 
-                            /**
-                             * Setup the completed quiz list recycler view
-                             */
-                            //TODO: This should be inside get quiz result list and firebase implementation
-                            completedQuizListAdapter = CompleteQuizAdapter(completedQuizList, this@ViewCourseActivity)
-                            completedQuizListRecyclerView.adapter = completedQuizListAdapter
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.exists()) {
+                                            val quizResults = ArrayList<QuizResultModel>()
+                                            for (quizResultEntry in snapshot.children) {
+                                                val quizResultModel = quizResultEntry.getValue(QuizResultModel::class.java)
+                                                if (quizResultModel != null) {
+                                                    if (quizResultModel.courseId.equals(courseId)) {
+                                                        quizResults.add(quizResultModel)
+                                                    }
+                                                }
+                                            }
+                                            /**
+                                             * Setup the completed quiz list recycler view
+                                             */
+                                            completedQuizListAdapter = CompleteQuizAdapter(quizResults, this@ViewCourseActivity)
+                                            completedQuizListRecyclerView.adapter = completedQuizListAdapter
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Toast.makeText(this@ViewCourseActivity, error.message, Toast.LENGTH_SHORT).show()
+                                    }
+                                })
                         }
                     }
 
@@ -247,12 +260,6 @@ class ViewCourseActivity : AppCompatActivity() {
                 Toast.makeText(this@ViewCourseActivity, error.message, Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun filterQuizList(quizList: List<Quiz>, isQuizCompleted : Boolean): List<Quiz> {
-        return quizList.filter {
-            quiz -> quiz.isCompleted == isQuizCompleted
-        }
     }
 
     /**

@@ -43,6 +43,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
 
     private var courseId: String? = null
     private var quizId: String? = null
+    private var quizName: String? = null
     private var answeredQuestionList: ArrayList<AnsweredQuestion> = arrayListOf()
 
     private lateinit var auth: FirebaseAuth
@@ -80,6 +81,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
         */
         quizId = intent.getStringExtra(Constants.QUIZ_ID).toString()
         courseId = intent.getStringExtra(Constants.COURSE_ID).toString()
+        quizName = intent.getStringExtra(Constants.QUIZ_NAME).toString()
 
         /**
          * Get the question list
@@ -213,6 +215,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                         val quizResult = QuizResultModel(
                             quizResultId,
                             quizId,
+                            quizName,
                             courseId,
                             auth.currentUser?.uid,
                             mCorrectAnswers,
