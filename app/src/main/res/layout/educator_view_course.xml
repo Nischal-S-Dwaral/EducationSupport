@@ -66,6 +66,12 @@
                 android:textSize="25dp"/>
 
             <TextView
+                android:id="@+id/Test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Test" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_view_course_description"

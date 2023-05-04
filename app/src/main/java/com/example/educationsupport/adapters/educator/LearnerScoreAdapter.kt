@@ -17,17 +17,13 @@ class LearnerScoreAdapter(private val learnerList: List<Learner>, private val co
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvLearnerName: TextView
-        //var progressBar: ProgressBar
-        //var tvCompletedQuizScoreViewProgress: TextView
-        var learnerQuizScore: TextView
-        //var scoreTitle: TextView
+        var progressBar: ProgressBar
+        var tvCompletedQuizScoreViewProgress: TextView
 
         init {
             tvLearnerName = itemView.findViewById(R.id.tv_learner_name)
-            learnerQuizScore = itemView.findViewById(R.id.learner_quiz_score)
-            //scoreTitle = itemView.findViewById(R.id.score_title)
-            //progressBar = itemView.findViewById(R.id.quiz_score_progress_bar)
-            //tvCompletedQuizScoreViewProgress = itemView.findViewById(R.id.completed_quiz_score_text_view_progress)
+            progressBar = itemView.findViewById(R.id.quiz_score_progress_bar)
+            tvCompletedQuizScoreViewProgress = itemView.findViewById(R.id.learner_quiz_score)
         }
     }
 
@@ -46,19 +42,19 @@ class LearnerScoreAdapter(private val learnerList: List<Learner>, private val co
 
         holder.tvLearnerName.text = learner.name
 
-        val correctAnswers = learner.correctAnswer
-        val totalQuestions = learner.totalQuestion
+//        val correctAnswers = learner.correctAnswer
+//        val totalQuestions = learner.totalQuestion
 
-        val resultString = buildString {
-            append(correctAnswers)
-            append(" out of ")
-            append(totalQuestions)
-        }
-
-        holder.learnerQuizScore.text = resultString
+//        val resultString = buildString {
+//            append(correctAnswers)
+//            append(" out of ")
+//            append(totalQuestions)
+//        }
+//
+//        holder.learnerQuizScore.text = resultString
         //holder.scoreTitle.text = "Learners Score"
-        //holder.progressBar.progress = learner.score
-        //holder.tvCompletedQuizScoreViewProgress.text = learner.score.toString()+"%"
+        holder.progressBar.progress = learner.score
+        holder.tvCompletedQuizScoreViewProgress.text = learner.score.toString()+"%"
 
         holder.itemView.setOnClickListener {
             //TODO Send data through the intent

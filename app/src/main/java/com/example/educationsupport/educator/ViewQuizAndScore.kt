@@ -14,25 +14,35 @@ import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.constants.QuizListConstants
 import com.example.educationsupport.educator.ViewQuizActivity
 import com.example.educationsupport.model.Learner
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarEntry
 
 class ViewQuizAndScore : AppCompatActivity() {
 
-    lateinit var viewbutton: Button
+    //lateinit var viewbutton: Button
     private var quizId: Int = 0
 
     private lateinit var tvLearnerQuizScore: TextView
+    private lateinit var titleText: TextView
 
     private lateinit var learnerScoreRecyclerView: RecyclerView
     private lateinit var learnerScoreLayoutManager: LinearLayoutManager
     private lateinit var learnerScoreAdapter: LearnerScoreAdapter
+    private var quizName: String? = null
+    private lateinit var barList: ArrayList<BarEntry>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_quiz_and_score)
-
+        titleText = findViewById(R.id.quiz_name)
         //quizId = intent.getIntExtra(Constants.QUIZ_ID, -1)
+        //viewbutton = findViewById(R.id.viewbutton)
 
-        viewbutton = findViewById(R.id.viewbutton)
+        barList = ArrayList()
+        barList.add(BarEntry(10f,500f))
+        barList.add(BarEntry(20f,100f))
+        barList.add(BarEntry(30f,300f))
+        barList.add(BarEntry(40f,800f))
 
         /**
          * Get the quiz information
@@ -42,6 +52,8 @@ class ViewQuizAndScore : AppCompatActivity() {
         val quizList = QuizListConstants.getQuizList()
         val firstQuiz = quizList.first()
         val learnerlist = firstQuiz.learnerList
+        quizName = intent.getStringExtra("quizName").toString()
+        titleText.text = titleText.text.toString() + "$quizName"
 
         /**
          * Setup the start quiz list recycler view
@@ -54,9 +66,9 @@ class ViewQuizAndScore : AppCompatActivity() {
         learnerScoreRecyclerView.adapter = learnerScoreAdapter
 
 
-        viewbutton.setOnClickListener{
-            val intent = Intent(this, ViewQuizActivity::class.java)
-            startActivity(intent)
-        }
+//        viewbutton.setOnClickListener{
+//            val intent = Intent(this, ViewQuizActivity::class.java)
+//            startActivity(intent)
+//        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.educationsupport.educator
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
@@ -16,6 +17,7 @@ import com.example.educationsupport.constants.EducatorCourseConstants
 import com.example.educationsupport.constants.QuizListConstants
 import com.example.educationsupport.fragment.educator.QuestionCountFragment
 import com.example.educationsupport.model.Quiz
+import com.example.educationsupport.educator.ViewQuizAndScore
 
 class EducatorCourseActivity : AppCompatActivity() {
 
@@ -29,6 +31,7 @@ class EducatorCourseActivity : AppCompatActivity() {
     private lateinit var quizListAdapter: QuizListAdapter
 
    private lateinit var addQuizBtn: Button
+   private lateinit var test: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +74,7 @@ class EducatorCourseActivity : AppCompatActivity() {
          */
         tvDescription = findViewById(R.id.tv_view_course_description)
         tvDescription.text = course?.description
+        test = findViewById(R.id.Test)
 
         /**
          * Setup the start quiz list recycler view
@@ -82,6 +86,10 @@ class EducatorCourseActivity : AppCompatActivity() {
         quizListRecyclerView.layoutManager = quizListLayoutManager
         quizListRecyclerView.adapter = quizListAdapter
 
+        test.setOnClickListener{
+            val intent = Intent(this, ViewQuizAndScore::class.java)
+            startActivity(intent)
+        }
         }
 
     private fun filterQuizList(quizList: List<Quiz>, isQuizCompleted : Boolean): List<Quiz> {

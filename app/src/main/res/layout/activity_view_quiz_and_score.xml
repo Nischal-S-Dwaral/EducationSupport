@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,24 +8,44 @@
     android:layout_height="match_parent"
     tools:context=".educator.ViewQuizAndScore">
 
-    <Button
-        android:id="@+id/viewbutton"
+    <!--    <Button-->
+<!--        android:id="@+id/viewbutton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="View Quiz"-->
+<!--        android:textColor="#151414"-->
+<!--        app:iconTint="#0E0202"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/view_quiz_learner_score"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.418" />-->
+
+
+    <TextView
+        android:id="@+id/quiz_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View Quiz"
-        android:textColor="#151414"
-        app:iconTint="#0E0202"
-        app:layout_constraintBottom_toTopOf="@+id/view_quiz_learner_score"
+        android:layout_marginBottom="348dp"
+        android:text="Quiz Name"
+        app:layout_constraintBottom_toTopOf="@+id/score_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.418" />
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="-60dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/view_quiz_learner_score"
         android:layout_width="409dp"
-        android:layout_height="454dp"
+        android:layout_height="254dp"
         android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,12 +55,12 @@
         android:id="@+id/score_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Learners Score"
+        android:text="Scores"
         android:textColor="#151414"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/view_quiz_learner_score"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewbutton" />
+       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
