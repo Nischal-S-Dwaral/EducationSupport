@@ -1,6 +1,5 @@
 package com.example.educationsupport.fragment.educator
 
-import android.app.SearchManager
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
@@ -14,14 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
-import com.example.educationsupport.adapters.educator.EducatorCourseListCardAdapter
 import com.example.educationsupport.adapters.educator.LearnerListCardAdapter
-import com.example.educationsupport.adapters.learner.CourseCardAdapter
-import com.example.educationsupport.adapters.learner.LearnerSearchAdapter
-import com.example.educationsupport.constants.CourseListConstants
 import com.example.educationsupport.constants.LearnerListConstants
 import com.example.educationsupport.model.Course
-import com.example.educationsupport.model.Learner
 import com.example.educationsupport.model.Users
 import com.google.firebase.database.*
 
@@ -51,7 +45,7 @@ class AddNewLearnerFragment : Fragment() {
         val learnerList = LearnerListConstants.getLearnerList()
 
         // Inflate the layout for this fragment
-         view = inflater.inflate(R.layout.educator_add_learner, container, false)
+        view = inflater.inflate(R.layout.educator_add_learner, container, false)
 
 
 
@@ -62,7 +56,7 @@ class AddNewLearnerFragment : Fragment() {
 
 
 
-        getLearnerListData()
+//        getLearnerListData()
 
         /**
          * Search view filtering
@@ -75,7 +69,7 @@ class AddNewLearnerFragment : Fragment() {
         val dbRef = FirebaseDatabase.getInstance().getReference( "Courses" )
         dbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                  val allCourseList = ArrayList<Course>()
+                val allCourseList = ArrayList<Course>()
                 if (snapshot.exists()) {
                     for (courseSnapshot in snapshot.children) { //iterate through the courses
                         val course = courseSnapshot.getValue(Course::class.java)
@@ -104,9 +98,11 @@ class AddNewLearnerFragment : Fragment() {
                             AdapterView.OnItemSelectedListener {
                             override fun onItemSelected(parent: AdapterView<*>,
                                                         view: View, position: Int, id: Long) {
-                                Toast.makeText(view!!.context,
+                                Toast.makeText(
+                                    view.context,
                                     getString(R.string.selected_item) + " " +
                                             "" + allCourseName[position], Toast.LENGTH_SHORT).show()
+                                getLearnerListData(allCourseList[position])
                             }
 
                             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -129,7 +125,7 @@ class AddNewLearnerFragment : Fragment() {
     }
 
 
-    private fun getLearnerListData() {
+    private fun getLearnerListData(course: Course) {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users")
 
@@ -140,9 +136,14 @@ class AddNewLearnerFragment : Fragment() {
                 if(snapshot.exists()){
                     for(learnerSnap in snapshot.children){
                         val learnerData = learnerSnap.getValue(Users::class.java)
-                        learnerList.add(learnerData!!)
+                        if (learnerData != null){
+                            if (!learnerData.isEducator!!){
+                                learnerList.add(learnerData)
+                            }
+                        }
                     }
-                    learnerListAdapter = LearnerListCardAdapter(learnerList, view.context)
+
+                    learnerListAdapter = LearnerListCardAdapter(learnerList, view.context, course)
                     learnerListRecyclerView.adapter = learnerListAdapter
 
                     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
