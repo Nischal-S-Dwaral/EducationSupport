@@ -76,7 +76,7 @@ class ReviewAnswerAdapter(
      * Based on the conditions get the view type
      */
     override fun getItemViewType(position: Int): Int {
-        return if (answeredQuestionList[position].isCorrect) {
+        return if (answeredQuestionList[position].isCorrect == true) {
             VIEW_TYPE_CORRECT_ANSWER
         } else {
             VIEW_TYPE_WRONG_ANSWER

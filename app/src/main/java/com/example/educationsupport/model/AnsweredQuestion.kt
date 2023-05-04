@@ -1,9 +1,10 @@
 package com.example.educationsupport.model
 
-data class AnsweredQuestion(
-    val questionNumber: Int,
-    val question: String,
-    val isCorrect: Boolean,
-    val selectedAnswer: String,
-    val correctAnswer: String
-)
+class AnsweredQuestion {
+
+    var questionNumber: Int = -1
+    var question: String? = null
+    var isCorrect: Boolean? = false
+    var selectedAnswer: String? = null
+    var correctAnswer: String? = null
+}

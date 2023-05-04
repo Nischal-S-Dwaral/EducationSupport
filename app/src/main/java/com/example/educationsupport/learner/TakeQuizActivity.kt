@@ -16,7 +16,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
+import com.example.educationsupport.model.AnsweredQuestion
 import com.example.educationsupport.model.QuestionModel
+import com.example.educationsupport.model.QuizResultModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -38,6 +41,12 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var optionFourTextView: TextView
     private lateinit var submitButton: Button
 
+    private var courseId: String? = null
+    private var quizId: String? = null
+    private var answeredQuestionList: ArrayList<AnsweredQuestion> = arrayListOf()
+
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_quiz)
@@ -53,6 +62,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
         optionThreeTextView = findViewById(R.id.tv_take_quiz_option_three)
         optionFourTextView = findViewById(R.id.tv_take_quiz_option_four)
         submitButton = findViewById(R.id.btn_take_quiz_submit)
+        auth = FirebaseAuth.getInstance()
 
         /**
          * Remove the time and battery etc top bar
@@ -68,21 +78,21 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
         /**
         * Take value passed from the Intent
         */
-        val quizId = intent.getStringExtra(Constants.QUIZ_ID).toString()
-        val courseId = intent.getStringExtra(Constants.COURSE_ID).toString()
+        quizId = intent.getStringExtra(Constants.QUIZ_ID).toString()
+        courseId = intent.getStringExtra(Constants.COURSE_ID).toString()
 
         /**
          * Get the question list
          */
-        getQuestionList(quizId, courseId)
+        getQuestionList()
     }
 
-    private fun getQuestionList(quizId: String, courseId: String) {
+    private fun getQuestionList() {
 
-        val quizDatabaseReference = FirebaseDatabase.getInstance().getReference("Quiz")
-            .child(quizId).child("questionList")
-
-        quizDatabaseReference.addValueEventListener(object : ValueEventListener {
+        quizId?.let {
+            FirebaseDatabase.getInstance().getReference("Quiz")
+                .child(it).child("questionList")
+        }?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val questionList = mutableListOf<QuestionModel>()
                 if (snapshot.exists()) {
@@ -95,7 +105,11 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                     mQuestionsList = questionList as ArrayList<QuestionModel>
                     setQuestion()
                 } else {
-                    Toast.makeText(this@TakeQuizActivity, "Can't start this quiz!!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@TakeQuizActivity,
+                        "Can't start this quiz!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -192,14 +206,36 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                         mCurrentQuestion <= mQuestionsList!!.size -> {
                             setQuestion()
                         } else -> {
-                        /**
-                         * Show the completed quiz screen and push the completed results to the DB
-                         */
-                        val intent = Intent(this, QuizResultActivity::class.java)
-                        intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionsList!!.size)
-                        intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
-                        startActivity(intent)
-                        finish()
+
+                        val quizResultDatabaseReference = FirebaseDatabase.getInstance().getReference("QuizResult")
+
+                        val quizResultId = quizResultDatabaseReference.push().key!!
+                        val quizResult = QuizResultModel(
+                            quizResultId,
+                            quizId,
+                            courseId,
+                            auth.currentUser?.uid,
+                            mCorrectAnswers,
+                            mQuestionsList!!.size,
+                            answeredQuestionList
+                        )
+
+                        quizResultDatabaseReference.child(quizResultId).setValue(quizResult)
+                            .addOnSuccessListener {
+                                /**
+                                 * Show the completed quiz screen and push the completed results to the DB
+                                 */
+                                val intent = Intent(this, QuizResultActivity::class.java)
+                                intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionsList!!.size)
+                                intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+                                intent.putExtra(Constants.QUIZ_RESULT_ID, quizResultId)
+                                intent.putExtra(Constants.COURSE_ID, courseId)
+                                startActivity(intent)
+                                finish()
+                            }.addOnFailureListener {
+                                Toast.makeText(this@TakeQuizActivity, "Error in saving result to firebase!! ${it.message}", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     }
                 } else {
@@ -208,37 +244,76 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                      */
                     val question = mQuestionsList!![mCurrentQuestion-1]
 
+                    val tempSelectedOptionsStringList = ArrayList<String>()
+                    val tempCorrectAnswerStringList = ArrayList<String>()
+
                     /**
                      * Sort the correct answers and the chosen answers
                      */
                     mSelectedOptionPosition.sort()
-                    val correctAnswerList = question!!.correctAnswer?.split(", ")?.sorted()
+                    val tempCorrectAnswerList = question.correctAnswer?.split(", ")?.sorted()
                         ?.toMutableList()
+                    val correctAnswerList = tempCorrectAnswerList?.map { it.toInt() }
 
                     /**
                      * Check if the selected options match the correct options
                      */
                     var isCorrectAnswer = true
-                    for (index in mSelectedOptionPosition.indices) {
-                        if (mSelectedOptionPosition[index] != (correctAnswerList?.get(index)
-                                ?.toInt() ?: -1)
-                        ) {
-                            answerView(mSelectedOptionPosition[index], R.drawable.wrong_quiz_option_border_bg)
+                    if (correctAnswerList != null) {
+                        if (mSelectedOptionPosition.size != correctAnswerList.size) {
                             isCorrectAnswer = false
+                            for (index in mSelectedOptionPosition.indices) {
+                                answerView(mSelectedOptionPosition[index], R.drawable.wrong_quiz_option_border_bg)
+                                getOptionStringFromIndex(mSelectedOptionPosition[index], question)?.let {
+                                    tempSelectedOptionsStringList.add(
+                                        it
+                                    )
+                                }
+                            }
+                        } else {
+                            for (index in mSelectedOptionPosition.indices) {
+                                if (mSelectedOptionPosition[index] != correctAnswerList[index]) {
+                                    answerView(mSelectedOptionPosition[index], R.drawable.wrong_quiz_option_border_bg)
+                                    isCorrectAnswer = false
+                                }
+                                getOptionStringFromIndex(mSelectedOptionPosition[index], question)?.let {
+                                    tempSelectedOptionsStringList.add(
+                                        it
+                                    )
+                                }
+                            }
+                        }
+
+                        for (index in correctAnswerList.indices) {
+                            answerView(correctAnswerList[index], R.drawable.correct_quiz_option_border_bg)
+
+                            getOptionStringFromIndex(correctAnswerList[index], question)?.let {
+                                tempCorrectAnswerStringList.add(
+                                    it
+                                )
+                            }
                         }
                     }
+
+                    val answeredQuestion = AnsweredQuestion()
+                    answeredQuestion.questionNumber = mCurrentQuestion
+                    answeredQuestion.question = question.question
 
                     if (isCorrectAnswer) {
                         /**
                          * Increment the correct answer count
                          */
                         mCorrectAnswers++
+                        answeredQuestion.isCorrect = true
                     }
-                    if (correctAnswerList != null) {
-                        for (index in correctAnswerList.indices) {
-                            answerView(correctAnswerList[index].toInt(), R.drawable.correct_quiz_option_border_bg)
-                        }
-                    }
+
+                    answeredQuestion.selectedAnswer = getStringFromList(tempSelectedOptionsStringList)
+                    answeredQuestion.correctAnswer = getStringFromList(tempCorrectAnswerStringList)
+
+                    /**
+                     * Adding to the answered question list
+                     */
+                    answeredQuestionList.add(answeredQuestion)
 
                     /**
                      * Making the options non clickable
@@ -260,6 +335,28 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun getOptionStringFromIndex(index: Int, question: QuestionModel): String? {
+        when (index) {
+            1 -> {
+                return question.optionOne
+            }
+            2 -> {
+                return question.optionTwo
+            }
+            3 -> {
+                return question.optionThree
+            }
+            4 -> {
+                return question.optionFour
+            }
+        }
+        return ""
+    }
+
+    private fun getStringFromList(stringList: ArrayList<String>): String {
+        return stringList.joinToString(separator = ", ")
     }
 
     /**
@@ -299,6 +396,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                 this,
                 R.drawable.default_quiz_option_border_bg
             )
+            mSelectedOptionPosition.remove(selectedOptionNum)
         } else {
             mSelectedOptionPosition.add(selectedOptionNum)
 

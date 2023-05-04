@@ -46,6 +46,18 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/btn_quiz_result_review_answers"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/white"
+        android:padding="10dp"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="REVIEW ANSWERS"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/btn_quiz_result_finish"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/white"
