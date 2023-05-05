@@ -6,11 +6,11 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.educationsupport.R
+import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 
 class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var progressBar: ProgressBar
@@ -41,6 +41,10 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var dbRef: DatabaseReference //to get courseId
     private lateinit var auth: FirebaseAuth
 
+    private var scheduledQuiz: Boolean = false
+    private var startDate: String? = null
+    private var endDate: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_quiz)
@@ -69,6 +73,9 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         quizName = intent.getStringExtra("quizName").toString()
         courseName = intent.getStringExtra("courseName").toString()
         titleText.text = titleText.text.toString()+":" + "$quizName"
+        scheduledQuiz = intent.getBooleanExtra(Constants.IS_QUIZ_SCHEDULED, false)
+        startDate = intent.getStringExtra(Constants.QUIZ_START_DATE)
+        endDate = intent.getStringExtra(Constants.QUIZ_END_DATE)
 
         //Getting CourseId based on courseName
         dbRef = FirebaseDatabase.getInstance().reference.child("Courses")
@@ -80,7 +87,6 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                      val course = c.getValue(Course::class.java)
                      courseId = course!!.id
                  }
-
                 }
             }
 
@@ -167,7 +173,10 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                             quizName!!,
                             courseId,
                             currentEducatorUser!!.uid,
-                            mQuestionsList
+                            mQuestionsList,
+                            scheduledQuiz,
+                            startDate,
+                            endDate
                         )
 
                         databaseReference.child(quizId).setValue(quiz)
@@ -178,7 +187,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 val intent = Intent(this, ViewQuizActivity::class.java)
-                                intent.putExtra("quizId", quizId);
+                                intent.putExtra("quizId", quizId)
                                 startActivity(intent)
                                 finish()
                             }.addOnFailureListener {
@@ -189,7 +198,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                                 ).show()
                             }
                     } else {
-                        mCurrentQuestion++;
+                        mCurrentQuestion++
                         setQuestion()
                     }
                 }

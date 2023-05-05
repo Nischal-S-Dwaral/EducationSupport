@@ -1,16 +1,15 @@
 package com.example.educationsupport.fragment.educator
 
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.educationsupport.R
+import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.educator.CreateQuizActivity
 import com.example.educationsupport.model.QuizModel
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +27,10 @@ class QuestionCountFragment() : DialogFragment() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var currentUser: FirebaseUser
 
+    private lateinit var scheduleQuiz: RadioButton
+    private lateinit var startDatePicker: DatePicker
+    private lateinit var endDatePicker: DatePicker
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,9 +42,12 @@ class QuestionCountFragment() : DialogFragment() {
         okBtn = view.findViewById(R.id.buttonOK)
         count = view.findViewById(R.id.questionCount)
         activityName = view.findViewById(R.id.activityNameEditText)
+        scheduleQuiz = view.findViewById(R.id.add_start_and_end_date_quiz_radio_btn)
+        startDatePicker = view.findViewById(R.id.start_date_quiz)
+        endDatePicker = view.findViewById(R.id.end_date_quiz)
 
 
-        var courseList = ArrayList<String>()
+        val courseList = ArrayList<String>()
         courseList.add("Select Course")
 
         //Fetching Course Names created by current Educator
@@ -57,9 +63,8 @@ class QuestionCountFragment() : DialogFragment() {
                 }
                 }
            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-                Log.w(ContentValues.TAG, "loadPost:onCancelled", error.toException())
-            }
+               Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT).show()
+           }
         })
 
         //Setting course name list to dropdown
@@ -72,36 +77,58 @@ class QuestionCountFragment() : DialogFragment() {
                 courseSelected = courseList[position]
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                Toast.makeText(view.context, "Nothing Selected", Toast.LENGTH_SHORT).show()
             }
         }
 
         okBtn.setOnClickListener {
             val flag = validateFields(view)
             if(flag){
-                val quizName = " "+activityName.text.toString();
-                val quesCount = count.text.toString();
+                val quizName = " "+activityName.text.toString()
+                val quesCount = count.text.toString()
 
-                intent = Intent(requireContext(), CreateQuizActivity::class.java);
-                intent.putExtra("count", quesCount)
-                intent.putExtra("quizName", quizName)
-                intent.putExtra("courseName", courseSelected) //use this to link quiz to course
-                startActivity(intent)
+                if (scheduleQuiz.isChecked) {
+                    val startDay: Int = startDatePicker.dayOfMonth
+                    val startMonth: Int = startDatePicker.month + 1
+                    val startYear: Int = startDatePicker.year
+                    val startDate = "$startDay/$startMonth/$startYear"
+
+                    val endDay: Int = endDatePicker.dayOfMonth
+                    val endMonth: Int = endDatePicker.month + 1
+                    val endYear: Int = endDatePicker.year
+                    val endDate = "$endDay/$endMonth/$endYear"
+
+                    intent = Intent(requireContext(), CreateQuizActivity::class.java)
+                    intent.putExtra("count", quesCount)
+                    intent.putExtra("quizName", quizName)
+                    intent.putExtra("courseName", courseSelected) //use this to link quiz to course
+                    intent.putExtra(Constants.IS_QUIZ_SCHEDULED, true)
+                    intent.putExtra(Constants.QUIZ_START_DATE, startDate)
+                    intent.putExtra(Constants.QUIZ_END_DATE, endDate)
+                    startActivity(intent)
+                } else {
+                    intent = Intent(requireContext(), CreateQuizActivity::class.java)
+                    intent.putExtra("count", quesCount)
+                    intent.putExtra("quizName", quizName)
+                    intent.putExtra("courseName", courseSelected) //use this to link quiz to course
+                    intent.putExtra(Constants.IS_QUIZ_SCHEDULED, false)
+                    startActivity(intent)
+                }
             }
         }
 
-        return view;
+        return view
     }
 
     private fun validateFields(view: View): Boolean {
         var flag = true
         if(activityName.text.toString().isEmpty()){
             activityName.error = "Name is missing"
-            flag = false;
+            flag = false
         }
         if(count.text.toString().isEmpty()){
             count.error = "Question count missing"
-            flag = false;
+            flag = false
         }
         if(courseSelected.isEmpty() || courseSelected.equals("Select Course")) {
             Toast.makeText(view.context, "Select valid course", Toast.LENGTH_SHORT).show()

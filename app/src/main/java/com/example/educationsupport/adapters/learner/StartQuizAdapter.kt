@@ -27,11 +27,15 @@ class StartQuizAdapter(
         var tvQuizName: TextView
         var llStartQuiz: LinearLayout
         var progressLoadQuiz: ProgressBar
+        var tvStartDate: TextView
+        var tvEndDate: TextView
 
         init {
             tvQuizName = itemView.findViewById(R.id.tv_quiz_name)
             llStartQuiz = itemView.findViewById(R.id.ll_start_quiz)
             progressLoadQuiz = itemView.findViewById(R.id.progress_load_quiz)
+            tvStartDate = itemView.findViewById(R.id.tv_start_quiz_card_start_date)
+            tvEndDate = itemView.findViewById(R.id.tv_start_quiz_card_end_date)
         }
     }
 
@@ -41,7 +45,17 @@ class StartQuizAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvQuizName.text = quizList[position].name
+
+        val quiz = quizList[position]
+        holder.tvQuizName.text = quiz.name
+
+        if (quiz.scheduledQuiz) {
+            holder.tvStartDate.visibility = View.VISIBLE
+            holder.tvStartDate.text = "Start Date: ${quiz.startDate}"
+
+            holder.tvEndDate.visibility = View.VISIBLE
+            holder.tvEndDate.text = "End Date: ${quiz.endDate}"
+        }
 
         holder.itemView.setOnClickListener {
             holder.llStartQuiz.visibility = View.GONE
@@ -51,9 +65,9 @@ class StartQuizAdapter(
                 holder.llStartQuiz.visibility = View.VISIBLE
                 holder.progressLoadQuiz.visibility = View.GONE
                 val intent = Intent(context, TakeQuizActivity::class.java)
-                intent.putExtra(Constants.QUIZ_ID, quizList[position].id)
+                intent.putExtra(Constants.QUIZ_ID, quiz.id)
                 intent.putExtra(Constants.COURSE_ID, courseId)
-                intent.putExtra(Constants.QUIZ_NAME, quizList[position].name)
+                intent.putExtra(Constants.QUIZ_NAME, quiz.name)
                 context.startActivity(intent)
             }, 2000)
         }

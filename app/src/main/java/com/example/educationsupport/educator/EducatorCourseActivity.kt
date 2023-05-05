@@ -1,7 +1,6 @@
 package com.example.educationsupport.educator
 
 import android.content.ContentValues
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -12,19 +11,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.educationsupport.EducatorMainActivity
 import com.example.educationsupport.R
 import com.example.educationsupport.adapters.educator.QuizListAdapter
-import com.example.educationsupport.adapters.educator.QuizQuestionAdapter
 import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.constants.EducatorCourseConstants
-import com.example.educationsupport.constants.QuizListConstants
 import com.example.educationsupport.fragment.educator.QuestionCountFragment
-import com.example.educationsupport.model.QuestionModel
-import com.example.educationsupport.model.Quiz
 import com.example.educationsupport.model.QuizModel
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 
 class EducatorCourseActivity : AppCompatActivity() {
 
@@ -79,7 +71,6 @@ class EducatorCourseActivity : AppCompatActivity() {
         /**
          * Get the QUIZ list of the course
          */
-
         databaseReference = FirebaseDatabase.getInstance().reference.child("Quiz")
         databaseReference.orderByChild("courseId").equalTo(courseId)
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -101,8 +92,6 @@ class EducatorCourseActivity : AppCompatActivity() {
                     quizListRecyclerView.setHasFixedSize(true)
                     quizListRecyclerView.layoutManager = quizListLayoutManager
                     quizListRecyclerView.adapter = quizListAdapter
-
-
                 }
             }
 
@@ -120,12 +109,6 @@ class EducatorCourseActivity : AppCompatActivity() {
         }
 
         }
-
-    private fun filterQuizList(quizList: List<Quiz>, isQuizCompleted : Boolean): List<Quiz> {
-        return quizList.filter {
-            quiz -> quiz.isCompleted == isQuizCompleted
-        }
-    }
 
     /**
      * Handle the event of back button pressed
