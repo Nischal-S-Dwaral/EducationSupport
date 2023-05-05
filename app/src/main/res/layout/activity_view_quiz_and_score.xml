@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:background="@drawable/bg_quiz_answer_review"
+                android:background="@drawable/result_stock_image"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7" />
 
@@ -57,33 +57,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/statistics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:text="Statistics"
+                android:gravity="center"
+                android:textSize="20sp"/>
 
-<!--                <TextView-->
-<!--                    android:id="@+id/quiz_name"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="Quiz Name" />-->
-
-                <TextView
-                    android:id="@+id/statistics"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Statistics"
-                    android:gravity="center"
-                    android:textSize="20sp"/>
-
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-            </LinearLayout>
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/view_quiz_and_score_bar_chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
 
             <TextView
                 android:id="@+id/score_title"
@@ -99,8 +84,7 @@
                 android:id="@+id/view_quiz_learner_score"
                 android:layout_width="409dp"
                 android:layout_height="254dp"
-                android:layout_marginBottom="52dp"
-                 />
+                android:layout_marginBottom="52dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

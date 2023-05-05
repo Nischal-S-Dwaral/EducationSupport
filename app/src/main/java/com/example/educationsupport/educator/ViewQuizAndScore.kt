@@ -1,6 +1,8 @@
 package com.example.educationsupport.educator
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -10,7 +12,13 @@ import com.example.educationsupport.R
 import com.example.educationsupport.adapters.educator.LearnerScoreAdapter
 import com.example.educationsupport.model.LearnerScore
 import com.example.educationsupport.model.QuizResultModel
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -24,7 +32,8 @@ class ViewQuizAndScore : AppCompatActivity() {
     private lateinit var learnerScoreRecyclerView: RecyclerView
     private lateinit var learnerScoreLayoutManager: LinearLayoutManager
     private lateinit var learnerScoreAdapter: LearnerScoreAdapter
-    private lateinit var barList: ArrayList<BarEntry>
+
+    private lateinit var chart: BarChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +44,13 @@ class ViewQuizAndScore : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         /**
-         * Setup the start quiz list recycler view
+         * Initialise bar chart
+         */
+        chart = findViewById(R.id.view_quiz_and_score_bar_chart)
+        chart.description.isEnabled = false
+
+        /**
+         * Initialise the view score list recycler view
         */
         learnerScoreLayoutManager = LinearLayoutManager(this@ViewQuizAndScore)
         learnerScoreRecyclerView = findViewById(R.id.view_quiz_learner_score)
@@ -51,6 +66,7 @@ class ViewQuizAndScore : AppCompatActivity() {
             FirebaseDatabase.getInstance().getReference("QuizResult").orderByChild("quizId").equalTo(quizId)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+                        val quizScorePercentageList = ArrayList<Int>()
                         val learnerScoreList = ArrayList<LearnerScore>()
                         if (snapshot.exists()) {
                             for (data in snapshot.children) {
@@ -65,11 +81,15 @@ class ViewQuizAndScore : AppCompatActivity() {
                                             quizResult.id
                                         )
                                         learnerScoreList.add(learnerScore)
+
+                                        quizScorePercentageList.add(quizResult.scorePercentage)
                                     }
                                 }
                             }
                             learnerScoreAdapter = LearnerScoreAdapter(learnerScoreList, this@ViewQuizAndScore)
                             learnerScoreRecyclerView.adapter = learnerScoreAdapter
+
+                            getBarChartDisplay(quizScorePercentageList)
                         }
                     }
 
@@ -80,11 +100,68 @@ class ViewQuizAndScore : AppCompatActivity() {
         }
     }
 
-    fun getData() {
-        barList = ArrayList()
-        barList.add(BarEntry(10f,10f))
-        barList.add(BarEntry(20f,20f))
-        barList.add(BarEntry(30f,30f))
-        barList.add(BarEntry(40f,40f))
+    private fun getBarChartDisplay(quizScorePercentageList: ArrayList<Int>) {
+
+        val range1 = mutableListOf<Int>()
+        val range2 = mutableListOf<Int>()
+        val range3 = mutableListOf<Int>()
+        val range4 = mutableListOf<Int>()
+
+        for (num in quizScorePercentageList) {
+            when (num) {
+                in 0..20 -> range1.add(num)
+                in 21..40 -> range2.add(num)
+                in 61..80 -> range3.add(num)
+                in 81..100 -> range4.add(num)
+            }
+        }
+
+        val entries = mutableListOf<BarEntry>()
+        entries.add(BarEntry(0f, range1.size.toFloat()))
+        entries.add(BarEntry(1f, range2.size.toFloat()))
+        entries.add(BarEntry(2f, range3.size.toFloat()))
+        entries.add(BarEntry(3f, range4.size.toFloat()))
+
+        val dataSet = BarDataSet(entries, "Score")
+        dataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
+        dataSet.valueTextColor = Color.BLACK
+        dataSet.valueTextSize = 15f
+
+        val data = BarData(dataSet)
+
+        chart.data = data
+
+        val labels = mutableListOf<String>()
+        labels.add("0-20")
+        labels.add("20-40")
+        labels.add("60-80")
+        labels.add("80-100")
+
+        chart.axisLeft.setDrawGridLines(false)
+        chart.axisRight.setDrawGridLines(false)
+        chart.xAxis.setDrawGridLines(false)
+
+        // Show only top and bottom axis values
+        chart.axisLeft.setDrawLabels(true)
+        chart.axisLeft.setDrawTopYLabelEntry(true)
+        chart.axisRight.setDrawLabels(false)
+        chart.axisRight.setDrawTopYLabelEntry(true)
+        chart.xAxis.setDrawLabels(true)
+
+        chart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+        chart.invalidate() // Refresh the chart
+    }
+
+    /**
+     * Handle the event of back button pressed
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
