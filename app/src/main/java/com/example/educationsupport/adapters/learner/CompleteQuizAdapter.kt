@@ -40,17 +40,12 @@ class CompleteQuizAdapter(private val quizResultList: ArrayList<QuizResultModel>
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val quizResult = quizResultList[position]
-        val countCorrectAnswer = quizResult.correctAnswerScore ?: 0
-        val countTotalQuestion = quizResult.totalQuestionScore ?: 0
-
-        val quizScore = countCorrectAnswer * 100/countTotalQuestion
 
         holder.tvCompletedQuizName.text = quizResult.quizName
-        holder.progressBar.progress = quizScore
-        holder.tvCompletedQuizScoreViewProgress.text = quizScore.toString()+"%"
+        holder.progressBar.progress = quizResult.scorePercentage!!
+        holder.tvCompletedQuizScoreViewProgress.text = quizResult.scorePercentage!!.toString()+"%"
 
         holder.itemView.setOnClickListener {
-            //TODO Send data through the intent
             val intent = Intent(context, QuizAnswerReviewActivity::class.java)
             intent.putExtra(Constants.QUIZ_RESULT_ID, quizResult.id)
             context.startActivity(intent)

@@ -211,6 +211,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
 
                         val quizResultDatabaseReference = FirebaseDatabase.getInstance().getReference("QuizResult")
                         val currentUser = auth.currentUser
+                        val quizScorePercentage = mCorrectAnswers * 100/mQuestionsList!!.size
 
                         val quizResultId = quizResultDatabaseReference.push().key!!
                         val quizResult = QuizResultModel(
@@ -222,7 +223,8 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                             mCorrectAnswers,
                             mQuestionsList!!.size,
                             answeredQuestionList,
-                            currentUser?.displayName
+                            currentUser?.displayName,
+                            quizScorePercentage
                         )
 
                         quizResultDatabaseReference.child(quizResultId).setValue(quizResult)
