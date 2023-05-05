@@ -110,7 +110,7 @@ class AddNewLearnerFragment : Fragment() {
     private fun getLearnerListData(course: Course) {
 
         FirebaseDatabase.getInstance().getReference("Users")
-            .orderByChild("isEducator").equalTo(false)
+            .orderByChild("educator").equalTo(false)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val learnerList: ArrayList<Users> = arrayListOf()

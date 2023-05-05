@@ -53,7 +53,6 @@ class CompleteQuizAdapter(private val quizResultList: ArrayList<QuizResultModel>
             //TODO Send data through the intent
             val intent = Intent(context, QuizAnswerReviewActivity::class.java)
             intent.putExtra(Constants.QUIZ_RESULT_ID, quizResult.id)
-            intent.putExtra(Constants.COURSE_ID, quizResult.courseId)
             context.startActivity(intent)
         }
     }

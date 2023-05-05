@@ -8,8 +8,10 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import com.example.educationsupport.model.Users
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -73,29 +75,39 @@ class RegisterActivity : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
 
-                        val map = HashMap<String, Any>()
-                        if (user != null) {
-                            user.email?.let { it1 -> map.put("email", it1) }
-                            user.uid.let { it2 -> map.put("uid", it2)}
-                            map["isEducator"] = educatorRadioButton.isChecked
-                            map["username"] = username
-                        }
+                        // Set display name for the user
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setDisplayName(username)
+                            .build()
 
-                        /**
-                         * Put value to firebase database
-                         */
-                        if (user != null) {
-                            reference.child("Users").child(user.uid).setValue(map).addOnCompleteListener {
-                                if (it.isSuccessful) {
+                        //Update the display name for the user
+                        user?.updateProfile(profileUpdates)
+                            ?.addOnCompleteListener { updateTask ->
+                                if (updateTask.isSuccessful) {
+                                    // User profile updated successfully
+                                    val userDataObject = Users(
+                                        user.email,
+                                        educatorRadioButton.isChecked,
+                                        user.uid,
+                                        username
+                                    )
+
                                     /**
-                                     * Move to Login Activity
+                                     * Put value to firebase database
                                      */
-                                    val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
+                                    reference.child("Users").child(user.uid).setValue(userDataObject).addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            /**
+                                             * Move to Login Activity
+                                             */
+                                            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                    }
                                 }
                             }
-                        }
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(this@RegisterActivity, "Registration failed.",

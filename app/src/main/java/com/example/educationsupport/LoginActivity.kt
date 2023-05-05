@@ -126,8 +126,8 @@ class LoginActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 if (snapshot.exists()) {
-                    val isEducator = snapshot.child("isEducator").value as Boolean
-                    if (isEducator) {
+                    val educator = snapshot.child("educator").value as Boolean
+                    if (educator) {
                         val intent = Intent(this@LoginActivity, EducatorMainActivity::class.java)
                         startActivity(intent)
                         finish()

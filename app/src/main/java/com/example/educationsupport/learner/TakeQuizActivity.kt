@@ -210,6 +210,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                         } else -> {
 
                         val quizResultDatabaseReference = FirebaseDatabase.getInstance().getReference("QuizResult")
+                        val currentUser = auth.currentUser
 
                         val quizResultId = quizResultDatabaseReference.push().key!!
                         val quizResult = QuizResultModel(
@@ -217,10 +218,11 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                             quizId,
                             quizName,
                             courseId,
-                            auth.currentUser?.uid,
+                            currentUser?.uid,
                             mCorrectAnswers,
                             mQuestionsList!!.size,
-                            answeredQuestionList
+                            answeredQuestionList,
+                            currentUser?.displayName
                         )
 
                         quizResultDatabaseReference.child(quizResultId).setValue(quizResult)

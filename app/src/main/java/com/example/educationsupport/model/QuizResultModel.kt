@@ -8,5 +8,6 @@ data class QuizResultModel(
     val learnerId: String? = null,
     val correctAnswerScore: Int? = 0,
     val totalQuestionScore: Int? = 0,
-    val answeredQuestionList: List<AnsweredQuestion> = emptyList()
+    val answeredQuestionList: List<AnsweredQuestion> = emptyList(),
+    val learnerName: String?= null
 )
