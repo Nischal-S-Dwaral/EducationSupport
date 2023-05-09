@@ -1,16 +1,22 @@
 package com.example.educationsupport.educator
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.educationsupport.NotificationReceiver
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var progressBar: ProgressBar
@@ -33,7 +39,6 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
 
     private var count: Int = 0
     private var quizName: String? = null
-    private var courseName: String? = null
     private var courseId: String? = null
     var currentEducatorUser: FirebaseUser? = null
 
@@ -71,30 +76,12 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
 
         count = (intent.getStringExtra("count")).toString().toInt()
         quizName = intent.getStringExtra("quizName").toString()
-        courseName = intent.getStringExtra("courseName").toString()
+        courseId = intent.getStringExtra("courseId").toString()
         titleText.text = titleText.text.toString()+":" + "$quizName"
         scheduledQuiz = intent.getBooleanExtra(Constants.IS_QUIZ_SCHEDULED, false)
         startDate = intent.getStringExtra(Constants.QUIZ_START_DATE)
         endDate = intent.getStringExtra(Constants.QUIZ_END_DATE)
 
-        //Getting CourseId based on courseName
-        dbRef = FirebaseDatabase.getInstance().reference.child("Courses")
-        dbRef.orderByChild("name").equalTo(courseName)
-        dbRef.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
-                 for(c in snapshot.children){
-                     val course = c.getValue(Course::class.java)
-                     courseId = course!!.id
-                 }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
         setQuestion()
         op1Chkbox.setOnClickListener(this)
         op2Chkbox.setOnClickListener(this)
@@ -179,6 +166,16 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                             endDate
                         )
 
+                        /**
+                         * Schedule Notification
+                         */
+                        scheduleNotification(
+                            convertStringToDate(startDate)!!,
+                            "Quiz Scheduled!!",
+                            "$quizName scheduled from $startDate to $endDate",
+                            courseId
+                        )
+
                         databaseReference.child(quizId).setValue(quiz)
                             .addOnSuccessListener {
                                 Toast.makeText(
@@ -254,5 +251,58 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun convertStringToDate(dateString: String?): Date? {
+        val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return try {
+            return dateString?.let { format.parse(it) }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
+    private fun scheduleNotification(date: Date, title: String, message: String, courseId: String?) {
+
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("EnrolledCourses")
+        databaseReference.orderByChild("courseId").equalTo(courseId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (data in snapshot.children) {
+
+                            val learnerId = data.child("learnerId").getValue(String::class.java)
+                            val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+                            val notificationIntent = Intent(this@CreateQuizActivity, NotificationReceiver::class.java)
+                            notificationIntent.putExtra("title", title)
+                            notificationIntent.putExtra("message", message)
+                            notificationIntent.putExtra("userId", learnerId)
+
+                            val pendingIntent = PendingIntent.getBroadcast(
+                                this@CreateQuizActivity, 0, notificationIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                            )
+
+//                            val calendar = Calendar.getInstance()
+//                            calendar.add(Calendar.MINUTE, 1)
+//                            val date1 = calendar.time
+
+                            alarmManager.setExact(
+                                AlarmManager.RTC_WAKEUP,
+                                date.time,
+                                pendingIntent
+                            )
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        this@CreateQuizActivity,
+                        error.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            })
+    }
 }

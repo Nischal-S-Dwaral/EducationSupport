@@ -1,6 +1,9 @@
 package com.example.educationsupport
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
@@ -41,6 +44,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        /**
+         * Initialising a notification channel
+         */
+        createNotificationChannel()
 
         /**
          * Initialise
@@ -143,5 +151,21 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, error.message, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    /**
+     * Creating Notification Channel for the application
+     */
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "My Notification Channel"
+            val descriptionText = "My Notification Channel Description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("notification_channel", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 }

@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.educator.CreateQuizActivity
-import com.example.educationsupport.model.QuizModel
+import com.example.educationsupport.model.Course
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -24,6 +24,7 @@ class QuestionCountFragment() : DialogFragment() {
     lateinit var intent: Intent
     lateinit var courseSpinner: Spinner
     var courseSelected: String = ""
+    var courseIdSelected: String = ""
     private lateinit var databaseReference: DatabaseReference
     private lateinit var currentUser: FirebaseUser
 
@@ -47,8 +48,9 @@ class QuestionCountFragment() : DialogFragment() {
         endDatePicker = view.findViewById(R.id.end_date_quiz)
 
 
-        val courseList = ArrayList<String>()
-        courseList.add("Select Course")
+        val courseNameList = ArrayList<String>()
+        val courseIdList = ArrayList<String>()
+        courseNameList.add("Select Course")
 
         //Fetching Course Names created by current Educator
         databaseReference = FirebaseDatabase.getInstance().reference.child("Courses")
@@ -57,8 +59,9 @@ class QuestionCountFragment() : DialogFragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()) {
                     for(course in snapshot.children){
-                        val courseData = course.getValue(QuizModel::class.java)
-                        courseList.add(courseData!!.name!!)
+                        val courseData = course.getValue(Course::class.java)
+                        courseNameList.add(courseData!!.name!!)
+                        courseIdList.add(courseData.id!!)
                     }
                 }
                 }
@@ -68,13 +71,18 @@ class QuestionCountFragment() : DialogFragment() {
         })
 
         //Setting course name list to dropdown
-        val arrayAdp = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,courseList)
+        val arrayAdp = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,courseNameList)
         courseSpinner.adapter = arrayAdp
         courseSpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View, position: Int, id: Long) {
-                courseSelected = courseList[position]
+                courseSelected = courseNameList[position]
+                courseIdSelected = if (position > 0) {
+                    courseIdList[position - 1]
+                } else {
+                    courseIdList[0]
+                }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 Toast.makeText(view.context, "Nothing Selected", Toast.LENGTH_SHORT).show()
@@ -101,7 +109,7 @@ class QuestionCountFragment() : DialogFragment() {
                     intent = Intent(requireContext(), CreateQuizActivity::class.java)
                     intent.putExtra("count", quesCount)
                     intent.putExtra("quizName", quizName)
-                    intent.putExtra("courseName", courseSelected) //use this to link quiz to course
+                    intent.putExtra("courseId", courseIdSelected) //use this to link quiz to course
                     intent.putExtra(Constants.IS_QUIZ_SCHEDULED, true)
                     intent.putExtra(Constants.QUIZ_START_DATE, startDate)
                     intent.putExtra(Constants.QUIZ_END_DATE, endDate)
@@ -110,7 +118,7 @@ class QuestionCountFragment() : DialogFragment() {
                     intent = Intent(requireContext(), CreateQuizActivity::class.java)
                     intent.putExtra("count", quesCount)
                     intent.putExtra("quizName", quizName)
-                    intent.putExtra("courseName", courseSelected) //use this to link quiz to course
+                    intent.putExtra("courseId", courseIdSelected) //use this to link quiz to course
                     intent.putExtra(Constants.IS_QUIZ_SCHEDULED, false)
                     startActivity(intent)
                 }
