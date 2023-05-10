@@ -5,6 +5,7 @@ data class Users (
     val educator: Boolean? = false,
     val uid: String? = null,
     val username: String? = null,
-    val bio: String? = null
+    val bio: String? = null,
+    val profilePicture: Boolean = false
 )
 

@@ -37,7 +37,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var storageReference: StorageReference
     private lateinit var imageURI: Uri
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -66,16 +65,19 @@ class ProfileActivity : AppCompatActivity() {
         logoutButton = findViewById(R.id.profile_logout_button)
         imageEditButton = findViewById(R.id.imageEditButton)
 
-        databaseReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentEducatorUser!!.uid)
+        databaseReference =
+            FirebaseDatabase.getInstance().reference.child("Users").child(currentEducatorUser!!.uid)
+        storageReference = FirebaseStorage.getInstance().getReference("Users").child("profileImage")
+            .child("profileImage" + currentEducatorUser!!.uid)
 
         getProfileValues()
 
         //For profile image
-        var getContentForImg = registerForActivityResult(
+        val getContentForImg = registerForActivityResult(
             GetContent()
         ) {
-            imageURI = it!!.normalizeScheme()
-            if(imageURI!=null){
+            if (it != null) {
+                imageURI = it.normalizeScheme()
                 profilePicture.setImageURI(imageURI)
             }
         }
@@ -83,10 +85,9 @@ class ProfileActivity : AppCompatActivity() {
         /**
          * Set the imageView click listener
          */
-        imageEditButton.setOnClickListener{
+        imageEditButton.setOnClickListener {
 
             getContentForImg.launch("image/*");
-
             enableEditing()
         }
         /**
@@ -121,13 +122,25 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun getProfileValues() {
-        databaseReference.addValueEventListener(object : ValueEventListener{
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
-                   val tmpUser = snapshot.getValue(Users::class.java)
-                    if(tmpUser!=null) {
+                if (snapshot.exists()) {
+                    val tmpUser = snapshot.getValue(Users::class.java)
+                    if (tmpUser != null) {
                         displayName.text = tmpUser.username ?: "Edit to set Username"
                         bio.text = tmpUser.bio ?: "Edit to set bio"
+                        if (tmpUser.profilePicture) {
+                            storageReference.getBytes(10 * 1080 * 1080).addOnSuccessListener {
+                                val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                                profilePicture.setImageBitmap(bitmap)
+                            }.addOnFailureListener {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    "Image not fetched",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     }
                 }
             }
@@ -136,17 +149,7 @@ class ProfileActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         })
-
-        storageReference = FirebaseStorage.getInstance().getReference("Users").child("profileImage").child("profileImage"+currentEducatorUser!!.uid)
-
-        storageReference.getBytes(10 * 1080 * 1080).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
-            profilePicture.setImageBitmap(bitmap)
-        }.addOnFailureListener {
-            Toast.makeText(this@ProfileActivity, "Image not fetched",Toast.LENGTH_SHORT)
-        }
-
-  }
+    }
 
     private fun enableEditing() {
         // Set the TextViews to be editable
@@ -179,45 +182,36 @@ class ProfileActivity : AppCompatActivity() {
         val newBio = bio.text.toString()
 
 
-        databaseReference.child("username").setValue(newDisplayName).addOnCompleteListener{
-                Toast.makeText(
-                    this@ProfileActivity,
-                    "Name saved successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-        }
-        databaseReference.child("bio").setValue(newBio).addOnCompleteListener{
-                Toast.makeText(
-                    this@ProfileActivity,
-                    "Bio saved successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-        }
+        databaseReference.child("username").setValue(newDisplayName)
+        databaseReference.child("bio").setValue(newBio)
 
-            uploadProfileImage()
-         // Update the TextViews with the new values
-            displayName.text = newDisplayName
-            bio.text = newBio
+        uploadProfileImage()
+        //Update the TextViews with the new values
+        displayName.text = newDisplayName
+        bio.text = newBio
     }
 
     private fun uploadProfileImage() {
 
-        val filename = "profileImage"+currentEducatorUser!!.uid
-        storageReference = FirebaseStorage.getInstance().getReference("Users").child("profileImage/$filename")
-        storageReference.putFile(imageURI).addOnSuccessListener {
-            Toast.makeText(
-                this@ProfileActivity,
-                "Image saved successfully",
-                Toast.LENGTH_SHORT
-            ).show()
-        }.addOnFailureListener {
-            Toast.makeText(
-                this@ProfileActivity,
-                "Image not saved ",
-                Toast.LENGTH_SHORT
-            ).show()
+        if (::imageURI.isInitialized) {
+            val filename = "profileImage" + currentEducatorUser!!.uid
+            storageReference =
+                FirebaseStorage.getInstance().getReference("Users").child("profileImage/$filename")
+            storageReference.putFile(imageURI).addOnSuccessListener {
+                Toast.makeText(
+                    this@ProfileActivity,
+                    "Image saved successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
+                databaseReference.child("profilePicture").setValue(true)
+            }.addOnFailureListener {
+                Toast.makeText(
+                    this@ProfileActivity,
+                    "Image not saved ",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
-
     }
 
     /**
