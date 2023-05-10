@@ -24,6 +24,35 @@
             android:text="Question"
             android:id="@+id/tv_take_quiz_question"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_take_quiz_play_audio"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/black"
+            android:text="Play Audio"
+            android:textColor="@color/white"
+            android:drawableLeft="@android:drawable/ic_media_play"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="15dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_take_quiz_stop_audio"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/black"
+            android:text="STOP Audio"
+            android:textColor="@color/white"
+            android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="15dp"
+            android:visibility="gone"/>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

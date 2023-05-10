@@ -7,4 +7,5 @@ data class QuestionModel(
     val optionThree: String? = null,
     val optionFour: String? = null,
     val correctAnswer: String? = null,
+    val audioUrl: String? = null
 )

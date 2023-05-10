@@ -70,6 +70,27 @@
                 android:hint="Enter Question"
                 android:inputType="textMultiLine" />
 
+            <Button
+                android:id="@+id/uploadAudioBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="UPLOAD AUDIO"
+                android:textColor="#ffff"
+                android:backgroundTint="@color/black"
+                android:textSize="18sp"
+                />
+
+            <TextView
+                android:id="@+id/tvAudioName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:text="Audio Name"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:visibility="gone"/>
+
+
             <EditText
                 android:id="@+id/option1EditText"
                 android:layout_width="match_parent"

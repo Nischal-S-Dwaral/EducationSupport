@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -40,7 +41,10 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var optionThreeTextView: TextView
     private lateinit var optionFourTextView: TextView
     private lateinit var submitButton: Button
+    private lateinit var playAudioButton: Button
+    private lateinit var stopAudioButton: Button
 
+    private var mediaPlayer: MediaPlayer? = null
     private var courseId: String? = null
     private var quizId: String? = null
     private var quizName: String? = null
@@ -63,6 +67,8 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
         optionThreeTextView = findViewById(R.id.tv_take_quiz_option_three)
         optionFourTextView = findViewById(R.id.tv_take_quiz_option_four)
         submitButton = findViewById(R.id.btn_take_quiz_submit)
+        playAudioButton = findViewById(R.id.btn_take_quiz_play_audio)
+        stopAudioButton = findViewById(R.id.btn_take_quiz_stop_audio)
         auth = FirebaseAuth.getInstance()
 
         /**
@@ -75,6 +81,7 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
         optionThreeTextView.setOnClickListener(this)
         optionFourTextView.setOnClickListener(this)
         submitButton.setOnClickListener(this)
+        stopAudioButton.setOnClickListener(this)
 
         /**
         * Take value passed from the Intent
@@ -158,6 +165,36 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
         optionTwoTextView.isClickable = true
         optionThreeTextView.isClickable = true
         optionFourTextView.isClickable = true
+
+        if (question.audioUrl != null) {
+            playAudioButton.visibility = View.VISIBLE
+
+            playAudioButton.setOnClickListener {
+                playAudioFromUrl(question.audioUrl)
+            }
+        }
+    }
+
+    private fun playAudioFromUrl(audioUrl: String) {
+        // Release any previously created MediaPlayer
+        mediaPlayer?.release()
+        mediaPlayer = null
+
+        // Create a new MediaPlayer
+        mediaPlayer = MediaPlayer()
+
+        // Set the audio URL as the data source
+        mediaPlayer?.setDataSource(audioUrl)
+
+        // Prepare the MediaPlayer
+        mediaPlayer?.prepare()
+
+        // Set a callback to start playing the audio when it's ready
+        mediaPlayer?.setOnPreparedListener {
+            mediaPlayer?.start()
+            stopAudioButton.visibility = View.VISIBLE
+            playAudioButton.visibility = View.GONE
+        }
     }
 
     /**
@@ -178,6 +215,10 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                 R.drawable.default_quiz_option_border_bg
             )
         }
+
+        playAudioButton.visibility = View.GONE
+        stopAudioButton.visibility = View.GONE
+        mediaPlayer?.stop()
     }
 
     /**
@@ -198,6 +239,9 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                 selectedOptionView(optionFourTextView,4)
             }
             R.id.btn_take_quiz_submit -> {
+
+                mediaPlayer?.stop()
+
                 /**
                  * We have to move to the next question
                  */
@@ -340,6 +384,11 @@ class TakeQuizActivity : AppCompatActivity(), View.OnClickListener {
                     }
                     mSelectedOptionPosition.clear()
                 }
+            }
+            R.id.btn_take_quiz_stop_audio -> {
+                playAudioButton.visibility = View.VISIBLE
+                stopAudioButton.visibility = View.GONE
+                mediaPlayer?.stop()
             }
         }
     }

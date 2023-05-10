@@ -1,11 +1,14 @@
 package com.example.educationsupport.educator
 
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.educationsupport.NotificationReceiver
 import com.example.educationsupport.R
@@ -14,9 +17,10 @@ import com.example.educationsupport.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var progressBar: ProgressBar
@@ -43,12 +47,16 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
     var currentEducatorUser: FirebaseUser? = null
 
     private lateinit var databaseReference: DatabaseReference //for adding quiz
-    private lateinit var dbRef: DatabaseReference //to get courseId
     private lateinit var auth: FirebaseAuth
 
     private var scheduledQuiz: Boolean = false
     private var startDate: String? = null
     private var endDate: String? = null
+
+    private lateinit var uploadAudioBtn: Button
+    private lateinit var tvAudioName: TextView
+    private lateinit var audioUploadedUrl: String
+    private lateinit var storageReference: StorageReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +80,8 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         op3Chkbox = findViewById(R.id.correctOp3)
         op4Chkbox = findViewById(R.id.correctOp4)
         submitBtn = findViewById(R.id.submitBtn)
-
+        uploadAudioBtn = findViewById(R.id.uploadAudioBtn)
+        tvAudioName = findViewById(R.id.tvAudioName)
 
         count = (intent.getStringExtra("count")).toString().toInt()
         quizName = intent.getStringExtra("quizName").toString()
@@ -82,12 +91,18 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         startDate = intent.getStringExtra(Constants.QUIZ_START_DATE)
         endDate = intent.getStringExtra(Constants.QUIZ_END_DATE)
 
+        /**
+         * Initialize firebase storage
+         */
+        storageReference = FirebaseStorage.getInstance().getReference("Question").child("audio")
+
         setQuestion()
         op1Chkbox.setOnClickListener(this)
         op2Chkbox.setOnClickListener(this)
         op3Chkbox.setOnClickListener(this)
         op4Chkbox.setOnClickListener(this)
         submitBtn.setOnClickListener(this)
+        uploadAudioBtn.setOnClickListener(this)
     }
 
     private fun setQuestion() {
@@ -103,6 +118,8 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         progressBar.progress = mCurrentQuestion
         progressBar.max = count
         progressTV.text = "$mCurrentQuestion" + "/" + progressBar.max
+
+        audioUploadedUrl = ""
     }
 
     private fun defaultOptionsView() {
@@ -117,6 +134,9 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         op2Chkbox.isChecked = false
         op3Chkbox.isChecked = false
         op4Chkbox.isChecked = false
+
+        uploadAudioBtn.visibility = View.VISIBLE
+        tvAudioName.visibility = View.GONE
     }
 
     override fun onClick(view: View?) {
@@ -140,13 +160,18 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                             }
                         }
 
+                        val audioUrl = audioUploadedUrl.ifEmpty {
+                            null
+                        }
+
                         val ques = QuestionModel(
                             quesTxt,
                             opt1,
                             opt2,
                             opt3,
                             opt4,
-                            correctAnswer
+                            correctAnswer,
+                            audioUrl
                         )
                         //Adding questions to List
                         mQuestionsList.add(ques)
@@ -169,12 +194,14 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                         /**
                          * Schedule Notification
                          */
-                        scheduleNotification(
-                            convertStringToDate(startDate)!!,
-                            "Quiz Scheduled!!",
-                            "$quizName scheduled from $startDate to $endDate",
-                            courseId
-                        )
+                        if (startDate != null && endDate != null) {
+                            scheduleNotification(
+                                convertStringToDate(startDate)!!,
+                                "Quiz Scheduled!!",
+                                "$quizName scheduled from $startDate to $endDate",
+                                courseId
+                            )
+                        }
 
                         databaseReference.child(quizId).setValue(quiz)
                             .addOnSuccessListener {
@@ -216,7 +243,9 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                 if (op4Chkbox.isChecked)
                     mSelectedCorrectAnswers.add(4)
             }
-
+            R.id.uploadAudioBtn -> {
+                pickAudioLauncher.launch("audio/*")
+            }
         }
     }
 
@@ -304,5 +333,38 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             })
+    }
+
+    private val pickAudioLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { audioUri ->
+        if (audioUri != null) {
+            val audioChildDatabaseReference = storageReference.child(audioUri.toString())
+            audioChildDatabaseReference.putFile(audioUri).addOnSuccessListener {
+                audioChildDatabaseReference.downloadUrl.addOnSuccessListener { downloadUri ->
+                    audioUploadedUrl = downloadUri.toString()
+
+                    /**
+                     * Disable upload button
+                     */
+                    uploadAudioBtn.visibility = View.GONE
+
+                    tvAudioName.visibility = View.VISIBLE
+                    tvAudioName.text = audioUri.lastPathSegment
+                }
+            }
+        }
+    }
+
+    /**
+     * Show when the user clicks back button while taking the quiz
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.MyAlertDialogStyle))
+        builder.setMessage("Are you sure you want to exit? Clicking on Yes, will clear your progress!")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog, id -> finish() }
+            .setNegativeButton("No") { dialog, id -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 }
