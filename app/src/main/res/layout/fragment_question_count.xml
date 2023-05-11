@@ -101,25 +101,16 @@
             android:orientation="horizontal"
             android:layout_marginBottom="10dp">
 
-            <RadioGroup
-                android:id="@+id/add_start_and_end_date_quiz_radio"
-                android:layout_marginStart="10dp"
+            <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_start_and_end_date_quiz_radio_btn"
-                    android:text="Schedule the quiz"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:layout_marginEnd="10dp"
-                    android:checked="false"
-                    android:buttonTint="@color/black"/>
-
-            </RadioGroup>
+                android:id="@+id/add_start_and_end_date_quiz_checkbox"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:layout_marginEnd="10dp"
+                android:checked="false"
+                android:buttonTint="@color/black"
+                android:text="Schedule the quiz" />
 
         </LinearLayout>
 

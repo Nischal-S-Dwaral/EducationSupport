@@ -28,7 +28,7 @@ class QuestionCountFragment() : DialogFragment() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var currentUser: FirebaseUser
 
-    private lateinit var scheduleQuiz: RadioButton
+    private lateinit var scheduleQuiz: CheckBox
     private lateinit var startDatePicker: DatePicker
     private lateinit var endDatePicker: DatePicker
 
@@ -43,7 +43,7 @@ class QuestionCountFragment() : DialogFragment() {
         okBtn = view.findViewById(R.id.buttonOK)
         count = view.findViewById(R.id.questionCount)
         activityName = view.findViewById(R.id.activityNameEditText)
-        scheduleQuiz = view.findViewById(R.id.add_start_and_end_date_quiz_radio_btn)
+        scheduleQuiz = view.findViewById(R.id.add_start_and_end_date_quiz_checkbox)
         startDatePicker = view.findViewById(R.id.start_date_quiz)
         endDatePicker = view.findViewById(R.id.end_date_quiz)
 
@@ -55,28 +55,35 @@ class QuestionCountFragment() : DialogFragment() {
         //Fetching Course Names created by current Educator
         databaseReference = FirebaseDatabase.getInstance().reference.child("Courses")
         databaseReference.orderByChild("educatorId").equalTo(currentUser.uid)
-        databaseReference.addValueEventListener(object : ValueEventListener{
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()) {
-                    for(course in snapshot.children){
+                if (snapshot.exists()) {
+                    for (course in snapshot.children) {
                         val courseData = course.getValue(Course::class.java)
                         courseNameList.add(courseData!!.name!!)
                         courseIdList.add(courseData.id!!)
                     }
                 }
-                }
-           override fun onCancelled(error: DatabaseError) {
-               Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT).show()
-           }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT).show()
+            }
         })
 
         //Setting course name list to dropdown
-        val arrayAdp = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,courseNameList)
+        val arrayAdp = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            courseNameList
+        )
         courseSpinner.adapter = arrayAdp
         courseSpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>,
-                                        view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
                 courseSelected = courseNameList[position]
                 courseIdSelected = if (position > 0) {
                     courseIdList[position - 1]
@@ -84,6 +91,7 @@ class QuestionCountFragment() : DialogFragment() {
                     courseIdList[0]
                 }
             }
+
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 Toast.makeText(view.context, "Nothing Selected", Toast.LENGTH_SHORT).show()
             }
@@ -91,8 +99,8 @@ class QuestionCountFragment() : DialogFragment() {
 
         okBtn.setOnClickListener {
             val flag = validateFields(view)
-            if(flag){
-                val quizName = " "+activityName.text.toString()
+            if (flag) {
+                val quizName = " " + activityName.text.toString()
                 val quesCount = count.text.toString()
 
                 if (scheduleQuiz.isChecked) {
@@ -130,15 +138,15 @@ class QuestionCountFragment() : DialogFragment() {
 
     private fun validateFields(view: View): Boolean {
         var flag = true
-        if(activityName.text.toString().isEmpty()){
+        if (activityName.text.toString().isEmpty()) {
             activityName.error = "Name is missing"
             flag = false
         }
-        if(count.text.toString().isEmpty()){
+        if (count.text.toString().isEmpty()) {
             count.error = "Question count missing"
             flag = false
         }
-        if(courseSelected.isEmpty() || courseSelected.equals("Select Course")) {
+        if (courseSelected.isEmpty() || courseSelected.equals("Select Course")) {
             Toast.makeText(view.context, "Select valid course", Toast.LENGTH_SHORT).show()
             flag = false
         }

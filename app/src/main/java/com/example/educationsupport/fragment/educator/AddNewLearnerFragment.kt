@@ -1,8 +1,6 @@
 package com.example.educationsupport.fragment.educator
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,7 +90,6 @@ class AddNewLearnerFragment : Fragment() {
                             }
 
                             override fun onNothingSelected(parent: AdapterView<*>) {
-                                // write code to perform some action
                             }
                         }
                     }
@@ -101,7 +98,10 @@ class AddNewLearnerFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.w(ContentValues.TAG, "loadPost:onCancelled", error.toException())
+                    Toast.makeText(
+                        view.context,
+                        error.message, Toast.LENGTH_SHORT
+                    ).show()
             }
         })
     }
@@ -130,13 +130,11 @@ class AddNewLearnerFragment : Fragment() {
 
                             override fun onQueryTextSubmit(query: String?): Boolean {
                                 learnerListAdapter.filter.filter(query)
-                                println("printing learner list")
                                 return false
                             }
 
                             override fun onQueryTextChange(newText: String?): Boolean {
                                 learnerListAdapter.filter.filter(newText)
-                                println("printing learner list")
                                 return false
                             }
 
