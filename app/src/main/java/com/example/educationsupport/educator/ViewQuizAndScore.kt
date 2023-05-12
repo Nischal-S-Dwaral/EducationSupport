@@ -1,13 +1,17 @@
 package com.example.educationsupport.educator
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.educationsupport.EducatorMainActivity
 import com.example.educationsupport.R
 import com.example.educationsupport.adapters.educator.LearnerScoreAdapter
 import com.example.educationsupport.model.LearnerScore
@@ -34,6 +38,7 @@ class ViewQuizAndScore : AppCompatActivity() {
     private lateinit var learnerScoreAdapter: LearnerScoreAdapter
 
     private lateinit var chart: BarChart
+    private lateinit var viewQuestionBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +64,15 @@ class ViewQuizAndScore : AppCompatActivity() {
 
         quizId = intent.getStringExtra("quizId").toString()
         getQuizResultData(quizId)
+
+        //Button to view quiz questions
+        viewQuestionBtn = findViewById(R.id.viewQuestionBtn)
+        viewQuestionBtn.setOnClickListener{
+            val intent = Intent(this@ViewQuizAndScore, ViewQuizActivity::class.java)
+            intent.putExtra("quizId",quizId);
+            startActivity(intent)
+        }
+
     }
 
     private fun getQuizResultData(quizId: String?) {

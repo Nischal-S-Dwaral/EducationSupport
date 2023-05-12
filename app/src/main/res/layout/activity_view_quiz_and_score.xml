@@ -47,23 +47,24 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layoutAnimation="@anim/layout_animation_move_up">
+        android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/layout_animation_move_up"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@+id/view_quiz_learner"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/statistics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Statistics"
                 android:gravity="center"
-                android:textSize="20sp"/>
+                android:text="Statistics"
+                android:textSize="20sp" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/view_quiz_and_score_bar_chart"
@@ -74,19 +75,27 @@
                 android:id="@+id/score_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Scores"
                 android:gravity="center"
+                android:text="Scores"
                 android:textColor="#151414"
-                android:textSize="20sp"
-                />
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/view_quiz_learner_score"
-                android:layout_width="409dp"
-                android:layout_height="254dp"
-                android:layout_marginBottom="52dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp" />
 
+            <Button
+                android:id="@+id/viewQuestionBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#F1CD09"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:text="View Questions" />
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
