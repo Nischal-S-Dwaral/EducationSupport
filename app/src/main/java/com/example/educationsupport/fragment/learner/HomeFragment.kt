@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var currentUser: FirebaseUser
     private lateinit var view: View
+    private lateinit var textviewName: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +47,9 @@ class HomeFragment : Fragment() {
          * Initialise User
          */
         currentUser = FirebaseAuth.getInstance().currentUser!!
+
+        textviewName = view.findViewById(R.id.tv_name)
+        textviewName.text = currentUser.displayName
 
         /**
          * Set up my courses recycler view
