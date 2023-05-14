@@ -39,7 +39,7 @@ class ViewQuizActivity : AppCompatActivity() {
                     val questionList:List<QuestionModel> = quiz!!.questionList
                     //Setting up quiz question adaptor
                     quizQuestionLayoutManager = LinearLayoutManager(this@ViewQuizActivity)
-                    quizQuestionAdapter = QuizQuestionAdapter(questionList, this@ViewQuizActivity)
+                    quizQuestionAdapter = QuizQuestionAdapter(questionList)
                     quizQuestionRecyclerView = findViewById(R.id.rv_view_quiz)
                     quizQuestionRecyclerView.setHasFixedSize(true)
                     quizQuestionRecyclerView.layoutManager = quizQuestionLayoutManager
