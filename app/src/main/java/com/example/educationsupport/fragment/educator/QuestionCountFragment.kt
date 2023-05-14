@@ -1,6 +1,7 @@
 package com.example.educationsupport.fragment.educator
 
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -98,7 +99,7 @@ class QuestionCountFragment() : DialogFragment() {
         }
 
         okBtn.setOnClickListener {
-            val flag = validateFields(view)
+            val flag = validateFields()
             if (flag) {
                 val quizName = " " + activityName.text.toString()
                 val quesCount = count.text.toString()
@@ -130,13 +131,22 @@ class QuestionCountFragment() : DialogFragment() {
                     intent.putExtra(Constants.IS_QUIZ_SCHEDULED, false)
                     startActivity(intent)
                 }
+            } else {
+                val builder = AlertDialog.Builder(view.context)
+                builder.setMessage("Please make sure all fields are filled")
+                    .setCancelable(true)
+                    .setPositiveButton("OK") { dialog, id ->
+                        dialog.cancel()
+                    }
+                val alert = builder.create()
+                alert.show()
             }
         }
 
         return view
     }
 
-    private fun validateFields(view: View): Boolean {
+    private fun validateFields(): Boolean {
         var flag = true
         if (activityName.text.toString().isEmpty()) {
             activityName.error = "Name is missing"
@@ -147,7 +157,6 @@ class QuestionCountFragment() : DialogFragment() {
             flag = false
         }
         if (courseSelected.isEmpty() || courseSelected.equals("Select Course")) {
-            Toast.makeText(view.context, "Select valid course", Toast.LENGTH_SHORT).show()
             flag = false
         }
         return flag

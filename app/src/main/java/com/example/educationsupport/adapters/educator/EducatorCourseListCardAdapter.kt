@@ -12,7 +12,6 @@ import com.example.educationsupport.R
 import com.example.educationsupport.constants.Constants
 import com.example.educationsupport.educator.EducatorCourseActivity
 import com.example.educationsupport.model.Course
-import com.example.educationsupport.model.Course1
 
 class EducatorCourseListCardAdapter(private val coursesDataset: ArrayList<Course>, private val context: Context) :
     RecyclerView.Adapter<EducatorCourseListCardAdapter.ViewHolder?>() {
@@ -59,7 +58,6 @@ class EducatorCourseListCardAdapter(private val coursesDataset: ArrayList<Course
          */
         holder.btnMoreDetails.setOnClickListener {
             val intent = Intent(context, EducatorCourseActivity::class.java)
-            //TODO: Update this
             intent.putExtra(Constants.COURSE_ID, course.id)
             intent.putExtra("courseName",course.name)
             intent.putExtra("courseDesc",course.description)
@@ -68,6 +66,6 @@ class EducatorCourseListCardAdapter(private val coursesDataset: ArrayList<Course
     }
 
     override fun getItemCount(): Int {
-        return coursesDataset.size;
+        return coursesDataset.size
     }
 }

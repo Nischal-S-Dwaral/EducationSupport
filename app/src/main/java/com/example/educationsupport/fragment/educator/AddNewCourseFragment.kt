@@ -1,5 +1,6 @@
 package com.example.educationsupport.fragment.educator
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.educationsupport.EducatorMainActivity
 import com.example.educationsupport.R
-import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.learner.ViewCourseActivity
 import com.example.educationsupport.model.Course
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -53,7 +52,6 @@ class AddNewCourseFragment : Fragment() {
                 saveCourseData(currentEducatorUser.uid, view)
             }
             val intent = Intent(context, EducatorMainActivity::class.java)
-//            intent.putExtra(Constants.COURSE_ID, course.id.toString())
             context?.startActivity(intent)
         }
         return view
@@ -63,30 +61,31 @@ class AddNewCourseFragment : Fragment() {
         val courseName = txtInputCourseName.text.toString()
         val courseDescription = txtInputCourseDescription.text.toString()
 
-        if (courseName.isEmpty()) {
-            Toast.makeText(view.context, "Please enter course name", Toast.LENGTH_SHORT)
-                .show()
+        if (courseName.isEmpty() || courseDescription.isEmpty()) {
+            val builder = AlertDialog.Builder(view.context)
+            builder.setMessage("Please enter all fields!!")
+                .setCancelable(true)
+                .setPositiveButton("OK") { dialog, id ->
+                    dialog.cancel()
+                }
+            val alert = builder.create()
+            alert.show()
+        } else {
+            val courseId = databaseReference.push().key!!
+            val course = Course(courseId, courseName, courseDescription, educatorUid)
+
+            databaseReference.child(courseId).setValue(course)
+                .addOnSuccessListener {
+                    Toast.makeText(view.context, "Added Course Successfully!!", Toast.LENGTH_SHORT)
+                        .show()
+
+                    txtInputCourseName.text?.clear()
+                    txtInputCourseDescription.text?.clear()
+
+                }.addOnFailureListener {
+                    Toast.makeText(view.context, "Error!! ${it.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
         }
-
-        if (courseDescription.isEmpty()) {
-            Toast.makeText(view.context, "Please enter course description", Toast.LENGTH_SHORT)
-                .show()
-        }
-
-        val courseId = databaseReference.push().key!!
-        val course = Course(courseId, courseName, courseDescription, educatorUid)
-
-        databaseReference.child(courseId).setValue(course)
-            .addOnSuccessListener {
-                Toast.makeText(view.context, "Added Course Successfully!!", Toast.LENGTH_SHORT)
-                    .show()
-
-                txtInputCourseName.text?.clear()
-                txtInputCourseDescription.text?.clear()
-
-            }.addOnFailureListener {
-                Toast.makeText(view.context, "Error!! ${it.message}", Toast.LENGTH_SHORT)
-                    .show()
-            }
     }
 }

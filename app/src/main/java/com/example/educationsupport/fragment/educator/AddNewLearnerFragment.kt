@@ -81,11 +81,6 @@ class AddNewLearnerFragment : Fragment() {
                                 parent: AdapterView<*>,
                                 view: View, position: Int, id: Long
                             ) {
-                                Toast.makeText(
-                                    view.context,
-                                    getString(R.string.selected_item) + " " +
-                                            "" + allCourseName[position], Toast.LENGTH_SHORT
-                                ).show()
                                 getLearnerListData(allCourseList[position])
                             }
 

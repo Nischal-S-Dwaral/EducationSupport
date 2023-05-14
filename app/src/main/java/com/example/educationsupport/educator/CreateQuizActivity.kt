@@ -197,7 +197,6 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                         if (startDate != null && endDate != null) {
                             scheduleNotification(
                                 convertStringToDate(startDate)!!,
-                                "Quiz Scheduled!!",
                                 "$quizName scheduled from $startDate to $endDate",
                                 courseId
                             )
@@ -225,6 +224,15 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                         mCurrentQuestion++
                         setQuestion()
                     }
+                } else {
+                    val builder = AlertDialog.Builder(this@CreateQuizActivity)
+                    builder.setMessage("Please select a correct answer!!")
+                        .setCancelable(true)
+                        .setPositiveButton("OK") { dialog, id ->
+                            dialog.cancel()
+                        }
+                    val alert = builder.create()
+                    alert.show()
                 }
             }
             R.id.correctOp1 -> {
@@ -290,7 +298,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun scheduleNotification(date: Date, title: String, message: String, courseId: String?) {
+    private fun scheduleNotification(date: Date, message: String, courseId: String?) {
 
         val databaseReference = FirebaseDatabase.getInstance().reference.child("EnrolledCourses")
         databaseReference.orderByChild("courseId").equalTo(courseId)
@@ -302,7 +310,7 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                             val learnerId = data.child("learnerId").getValue(String::class.java)
                             val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
                             val notificationIntent = Intent(this@CreateQuizActivity, NotificationReceiver::class.java)
-                            notificationIntent.putExtra("title", title)
+                            notificationIntent.putExtra("title", "Quiz Scheduled!!")
                             notificationIntent.putExtra("message", message)
                             notificationIntent.putExtra("userId", learnerId)
 

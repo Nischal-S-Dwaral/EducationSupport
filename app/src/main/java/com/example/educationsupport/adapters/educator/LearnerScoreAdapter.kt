@@ -48,7 +48,6 @@ class LearnerScoreAdapter(private val learnerScoreList: ArrayList<LearnerScore>,
         holder.tvCompletedQuizScoreViewProgress.text = learner.scorePercentage.toString()+"%"
 
         holder.itemView.setOnClickListener {
-            //TODO Send data through the intent
             val intent = Intent(context, QuizAnswerReviewActivity::class.java)
             intent.putExtra(Constants.QUIZ_RESULT_ID, learner.quizResultId)
             context.startActivity(intent)
