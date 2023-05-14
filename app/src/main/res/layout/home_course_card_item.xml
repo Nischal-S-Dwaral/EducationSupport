@@ -12,28 +12,30 @@
     <LinearLayout
         android:id="@+id/ll_course_card_background"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:background="@color/black"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="2">
 
         <ImageView
             android:id="@+id/ll_course_card_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_course_card_icon"
-            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/bg_course_list"
+            android:scaleType="centerCrop"
             android:contentDescription="Course card icon"/>
 
         <TextView
             android:id="@+id/ll_course_card_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="Android Development"
             android:textColor="@android:color/white"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:textSize="24dp"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
