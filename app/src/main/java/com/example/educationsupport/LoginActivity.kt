@@ -1,5 +1,6 @@
 package com.example.educationsupport
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
@@ -84,43 +85,47 @@ class LoginActivity : AppCompatActivity() {
             val email: String = txtInputEmail.text.toString()
             val password: String = txtInputPwd.text.toString()
 
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(this@LoginActivity, "Please enter email address", Toast.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
-            }
-            if (TextUtils.isEmpty(password)) {
-                Toast.makeText(this@LoginActivity, "Please enter password", Toast.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
-            }
-
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Toast.makeText(
-                            this@LoginActivity, "Login Successfully.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        val user = auth.currentUser
-
-                        /**
-                         *  Sign in success, update UI with the signed-in with main activity
-                         */
-                        if (user != null) {
-                            startActivityBasedOnUser(user)
-                        }
-
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(
-                            this@LoginActivity, "Login failed.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                val builder = AlertDialog.Builder(this@LoginActivity)
+                builder.setMessage("Please enter all details!!")
+                    .setCancelable(true)
+                    .setPositiveButton("OK") { dialog, id ->
+                        dialog.cancel()
                     }
-                }
+                val alert = builder.create()
+                alert.show()
+            }  else {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(
+                                this@LoginActivity, "Login Successfully.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            val user = auth.currentUser
+
+                            /**
+                             *  Sign in success, update UI with the signed-in with main activity
+                             */
+                            if (user != null) {
+                                startActivityBasedOnUser(user)
+                            }
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            val builder = AlertDialog.Builder(this@LoginActivity)
+                            builder.setMessage("Login Failed!! "+ (task.exception?.message ?: ""))
+                                .setCancelable(true)
+                                .setPositiveButton("OK") { dialog, id ->
+                                    dialog.cancel()
+                                }
+                            val alert = builder.create()
+                            alert.show()
+                        }
+                    }
+            }
         }
     }
 

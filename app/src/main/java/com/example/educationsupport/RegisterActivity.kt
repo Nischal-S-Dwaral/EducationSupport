@@ -1,11 +1,11 @@
 package com.example.educationsupport
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.example.educationsupport.model.Users
@@ -57,63 +57,68 @@ class RegisterActivity : AppCompatActivity() {
             val password: String = txtInputPwd.text.toString()
             val username: String = txtInputUsername.text.toString()
 
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(this@RegisterActivity, "Please enter email address", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            if (TextUtils.isEmpty(password)) {
-                Toast.makeText(this@RegisterActivity, "Please enter password", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            if (TextUtils.isEmpty(username)) {
-                Toast.makeText(this@RegisterActivity, "Please enter username", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val user = auth.currentUser
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
+                val builder = AlertDialog.Builder(this@RegisterActivity)
+                builder.setMessage("Please enter all details!!")
+                    .setCancelable(true)
+                    .setPositiveButton("OK") { dialog, id ->
+                        dialog.cancel()
+                    }
+                val alert = builder.create()
+                alert.show()
+            } else {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            val user = auth.currentUser
 
-                        // Set display name for the user
-                        val profileUpdates = UserProfileChangeRequest.Builder()
-                            .setDisplayName(username)
-                            .build()
+                            // Set display name for the user
+                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                .setDisplayName(username)
+                                .build()
 
-                        //Update the display name for the user
-                        user?.updateProfile(profileUpdates)
-                            ?.addOnCompleteListener { updateTask ->
-                                if (updateTask.isSuccessful) {
-                                    // User profile updated successfully
-                                    val userDataObject = Users(
-                                        user.email,
-                                        educatorRadioButton.isChecked,
-                                        user.uid,
-                                        username
-                                    )
+                            //Update the display name for the user
+                            user?.updateProfile(profileUpdates)
+                                ?.addOnCompleteListener { updateTask ->
+                                    if (updateTask.isSuccessful) {
+                                        // User profile updated successfully
+                                        val userDataObject = Users(
+                                            user.email,
+                                            educatorRadioButton.isChecked,
+                                            user.uid,
+                                            username
+                                        )
 
-                                    /**
-                                     * Put value to firebase database
-                                     */
-                                    reference.child("Users").child(user.uid).setValue(userDataObject).addOnCompleteListener {
-                                        if (it.isSuccessful) {
-                                            /**
-                                             * Move to Login Activity
-                                             */
-                                            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-                                            startActivity(intent)
-                                            finish()
+                                        /**
+                                         * Put value to firebase database
+                                         */
+                                        reference.child("Users").child(user.uid).setValue(userDataObject).addOnCompleteListener {
+                                            if (it.isSuccessful) {
+                                                /**
+                                                 * Move to Login Activity
+                                                 */
+                                                val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                                                startActivity(intent)
+                                                finish()
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(this@RegisterActivity, "Registration failed.",
-                            Toast.LENGTH_SHORT).show()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            val builder = AlertDialog.Builder(this@RegisterActivity)
+                            builder.setMessage("Registration failed!! "+ (task.exception?.message ?: ""))
+                                .setCancelable(true)
+                                .setPositiveButton("OK") { dialog, id ->
+                                    dialog.cancel()
+                                }
+                            val alert = builder.create()
+                            alert.show()
+                        }
                     }
-                }
+            }
         }
     }
 }

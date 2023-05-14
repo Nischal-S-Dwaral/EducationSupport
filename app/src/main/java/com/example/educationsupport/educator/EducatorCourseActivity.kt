@@ -1,8 +1,6 @@
 package com.example.educationsupport.educator
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
@@ -32,7 +30,7 @@ class EducatorCourseActivity : AppCompatActivity() {
     private lateinit var quizListAdapter: QuizListAdapter
 
     private lateinit var databaseReference: DatabaseReference
-   private lateinit var addQuizBtn: Button
+    private lateinit var addQuizBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +43,7 @@ class EducatorCourseActivity : AppCompatActivity() {
         courseName = intent.getStringExtra("courseName").toString()
         courseDesc = intent.getStringExtra("courseDesc").toString()
 
-        addQuizBtn = findViewById(R.id.addQuizButton);
+        addQuizBtn = findViewById(R.id.addQuizButton)
 
         /**
          * Remove the time and battery etc top bar
@@ -66,49 +64,47 @@ class EducatorCourseActivity : AppCompatActivity() {
         tvDescription = findViewById(R.id.tv_view_course_description)
         tvDescription.text = courseDesc
 
-
+        quizListLayoutManager = LinearLayoutManager(this@EducatorCourseActivity)
+        quizListRecyclerView = findViewById(R.id.rv_view_quiz_list)
+        quizListRecyclerView.setHasFixedSize(true)
+        quizListRecyclerView.layoutManager = quizListLayoutManager
 
         /**
          * Get the QUIZ list of the course
          */
         databaseReference = FirebaseDatabase.getInstance().reference.child("Quiz")
         databaseReference.orderByChild("courseId").equalTo(courseId)
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val quizList = mutableListOf <QuizModel>()
-                    for(data in snapshot.children){
-                        val quiz = data.getValue(QuizModel::class.java)
-                        if(quiz!=null){
-                        quizList.add(quiz)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val quizList = mutableListOf<QuizModel>()
+                        for (data in snapshot.children) {
+                            val quiz = data.getValue(QuizModel::class.java)
+                            if (quiz != null) {
+                                quizList.add(quiz)
+                            }
                         }
-                   }
-                    /**
-                     * Setup the start quiz list recycler view
-                     */
-                    quizListLayoutManager = LinearLayoutManager(this@EducatorCourseActivity)
-                    quizListAdapter = QuizListAdapter(quizList, this@EducatorCourseActivity)
-                    quizListRecyclerView = findViewById(R.id.rv_view_quiz_list)
-                    quizListRecyclerView.setHasFixedSize(true)
-                    quizListRecyclerView.layoutManager = quizListLayoutManager
-                    quizListRecyclerView.adapter = quizListAdapter
+                        /**
+                         * Setup the start quiz list recycler view
+                         */
+                        quizListAdapter = QuizListAdapter(quizList, this@EducatorCourseActivity)
+                        quizListRecyclerView.adapter = quizListAdapter
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-                Log.w(ContentValues.TAG, "loadPost:onCancelled", error.toException())
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
 
 
 
         addQuizBtn.setOnClickListener {
             val showPopUp = QuestionCountFragment()
-            showPopUp.show(supportFragmentManager,"showPopUp")
+            showPopUp.show(supportFragmentManager, "showPopUp")
         }
 
-        }
+    }
 
     /**
      * Handle the event of back button pressed

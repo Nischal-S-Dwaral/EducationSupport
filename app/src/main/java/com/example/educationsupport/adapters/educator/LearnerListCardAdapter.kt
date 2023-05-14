@@ -3,15 +3,16 @@ package com.example.educationsupport.adapters.educator
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
-import com.example.educationsupport.constants.Constants
-import com.example.educationsupport.learner.ViewCourseActivity
-import com.example.educationsupport.model.*
+import com.example.educationsupport.model.Course
+import com.example.educationsupport.model.EnrolledCourse
+import com.example.educationsupport.model.Users
 import com.google.firebase.database.FirebaseDatabase
 
 class LearnerListCardAdapter(
@@ -88,6 +89,18 @@ class LearnerListCardAdapter(
                                 .show()
                         }
 
+                    val recipientEmail = learner.email
+                    val subject = "Invitation to join " + course.name
+                    val message = "I have enrolled you to the ${course.name}. Please have a look in the application."
+
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/html"
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf(recipientEmail))
+                        putExtra(Intent.EXTRA_SUBJECT, subject)
+                        putExtra(Intent.EXTRA_TEXT, Html.fromHtml(message))
+                    }
+
+                    context.startActivity(Intent.createChooser(intent, "Send email..."))
                 }
             val alert = builder.create()
             alert.show()
