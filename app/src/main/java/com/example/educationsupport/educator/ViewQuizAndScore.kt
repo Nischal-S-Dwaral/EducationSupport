@@ -123,10 +123,10 @@ class ViewQuizAndScore : AppCompatActivity() {
 
         for (num in quizScorePercentageList) {
             when (num) {
-                in 0..20 -> range1.add(num)
-                in 21..40 -> range2.add(num)
-                in 61..80 -> range3.add(num)
-                in 81..100 -> range4.add(num)
+                in 0..25 -> range1.add(num)
+                in 26..50 -> range2.add(num)
+                in 51..75 -> range3.add(num)
+                in 76..100 -> range4.add(num)
             }
         }
 
@@ -146,10 +146,10 @@ class ViewQuizAndScore : AppCompatActivity() {
         chart.data = data
 
         val labels = mutableListOf<String>()
-        labels.add("0-20")
-        labels.add("20-40")
-        labels.add("60-80")
-        labels.add("80-100")
+        labels.add("0-25")
+        labels.add("26-50")
+        labels.add("51-75")
+        labels.add("76-100")
 
         chart.axisLeft.setDrawGridLines(false)
         chart.axisRight.setDrawGridLines(false)
