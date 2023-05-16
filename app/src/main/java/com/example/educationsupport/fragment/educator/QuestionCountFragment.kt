@@ -51,26 +51,25 @@ class QuestionCountFragment() : DialogFragment() {
 
         val courseNameList = ArrayList<String>()
         val courseIdList = ArrayList<String>()
-        courseNameList.add("Select Course")
 
         //Fetching Course Names created by current Educator
         databaseReference = FirebaseDatabase.getInstance().reference.child("Courses")
         databaseReference.orderByChild("educatorId").equalTo(currentUser.uid)
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (course in snapshot.children) {
-                        val courseData = course.getValue(Course::class.java)
-                        courseNameList.add(courseData!!.name!!)
-                        courseIdList.add(courseData.id!!)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (course in snapshot.children) {
+                            val courseData = course.getValue(Course::class.java)
+                            courseNameList.add(courseData!!.name!!)
+                            courseIdList.add(courseData.id!!)
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT).show()
+                }
+            })
 
         //Setting course name list to dropdown
         val arrayAdp = ArrayAdapter(
