@@ -238,18 +238,26 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
             R.id.correctOp1 -> {
                 if (op1Chkbox.isChecked)
                     mSelectedCorrectAnswers.add(1)
+                else
+                    mSelectedCorrectAnswers.remove(1);
             }
             R.id.correctOp2 -> {
                 if (op2Chkbox.isChecked)
                     mSelectedCorrectAnswers.add(2)
+                else
+                    mSelectedCorrectAnswers.remove(2);
             }
             R.id.correctOp3 -> {
                 if (op3Chkbox.isChecked)
                     mSelectedCorrectAnswers.add(3)
+                else
+                    mSelectedCorrectAnswers.remove(3);
             }
             R.id.correctOp4 -> {
                 if (op4Chkbox.isChecked)
                     mSelectedCorrectAnswers.add(4)
+                else
+                    mSelectedCorrectAnswers.remove(4);
             }
             R.id.uploadAudioBtn -> {
                 pickAudioLauncher.launch("audio/*")
