@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.educationsupport.R
 import com.example.educationsupport.adapters.educator.EducatorCourseListCardAdapter
 import com.example.educationsupport.model.Course
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class EducatorHomeFragment : Fragment() {
@@ -19,7 +20,6 @@ class EducatorHomeFragment : Fragment() {
     private lateinit var educatorCoursesListAdaptor: EducatorCourseListCardAdapter
     private lateinit var educatorCourseList: ArrayList<Course>
     private lateinit var view: View
-    private lateinit var databaseReference: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +43,14 @@ class EducatorHomeFragment : Fragment() {
     }
 
     private fun getEducatorCourses(): ArrayList<Course> {
-        databaseReference = FirebaseDatabase.getInstance().getReference("Courses")
-        educatorCourseList = arrayListOf<Course>()
-        databaseReference.addValueEventListener(object : ValueEventListener{
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val query = FirebaseDatabase.getInstance().getReference("Courses")
+            .orderByChild("educatorId").equalTo(user?.uid)
+
+        educatorCourseList = arrayListOf()
+        query.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 educatorCourseList.clear()
                 if (snapshot.exists()) {

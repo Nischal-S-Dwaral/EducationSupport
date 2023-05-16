@@ -319,13 +319,14 @@ class CreateQuizActivity : AppCompatActivity(), View.OnClickListener {
                                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                             )
 
-//                            val calendar = Calendar.getInstance()
-//                            calendar.add(Calendar.MINUTE, 1)
-//                            val date1 = calendar.time
+                            //TODO: Delete later
+                            val calendar = Calendar.getInstance()
+                            calendar.add(Calendar.MINUTE, 1)
+                            val date1 = calendar.time
 
                             alarmManager.setExact(
                                 AlarmManager.RTC_WAKEUP,
-                                date.time,
+                                date1.time,
                                 pendingIntent
                             )
                         }
