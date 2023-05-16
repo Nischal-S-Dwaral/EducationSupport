@@ -51,6 +51,7 @@ class QuestionCountFragment() : DialogFragment() {
 
         val courseNameList = ArrayList<String>()
         val courseIdList = ArrayList<String>()
+        courseNameList.add("Select Course")
 
         //Fetching Course Names created by current Educator
         databaseReference = FirebaseDatabase.getInstance().reference.child("Courses")

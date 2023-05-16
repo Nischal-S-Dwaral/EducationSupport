@@ -16,6 +16,7 @@ import com.example.educationsupport.R
 import com.example.educationsupport.adapters.educator.LearnerListCardAdapter
 import com.example.educationsupport.model.Course
 import com.example.educationsupport.model.Users
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -52,8 +53,10 @@ class AddNewLearnerFragment : Fragment() {
     }
 
     private fun getAllCourses() {
+        val user = FirebaseAuth.getInstance().currentUser
         val dbRef = FirebaseDatabase.getInstance().getReference("Courses")
-        dbRef.addValueEventListener(object : ValueEventListener {
+        dbRef.orderByChild("educatorId").equalTo(user?.uid)
+            .addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val allCourseList = ArrayList<Course>()
                 if (snapshot.exists()) {
